@@ -1,0 +1,45 @@
+{
+  "name": "cdk-solution",
+  "version": "0.1.0",
+  "bin": {
+    "cdk-solution": "bin/secure_media_stream.js"
+  },
+  "scripts": {
+    "postinstall": "npm run build",
+    "build": "npx tsc",
+    "watch": "npx tsc -w",
+    "test": "jest --coverage",
+    "clean": "rm -rf node_modules/ dist/ coverage/ package-lock.json",
+    "lint": "npx eslint .",
+    "audit": "npm audit && npx cdk synth | cfn_nag",
+    "bootstrap": "npx cdk bootstrap",
+    "deploy": "npx cdk deploy --all",
+    "wizard": "node dist/bin/wizard/index.js"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.5.0",
+    "@types/joi": "^17.2.3",
+    "@types/node": "10.17.27",
+    "@types/prettier": "2.6.0",
+    "@types/prompts": "^2.0.14",
+    "@typescript-eslint/eslint-plugin": "^5.16.0",
+    "@typescript-eslint/parser": "^5.16.0",
+    "aws-cdk": "^2.24.1",
+    "jest": "^27.5.1",
+    "ts-jest": "^27.1.4",
+    "ts-node": "^10.7.0",
+    "typescript": "~3.9.7",
+    "zip-local": "^0.3.5"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-apigatewayv2-alpha": "^2.15.0-alpha.0",
+    "@aws-cdk/aws-apigatewayv2-authorizers-alpha": "^2.15.0-alpha.0",
+    "@aws-cdk/aws-apigatewayv2-integrations-alpha": "^2.15.0-alpha.0",
+    "aws-cdk-lib": "2.24.1",
+    "constructs": "^10.0.0",
+    "joi": "^17.6.0",
+    "prompts": "^2.4.2",
+    "source-map-support": "^0.5.16",
+    "watch": "^0.13.0"
+  }
+}

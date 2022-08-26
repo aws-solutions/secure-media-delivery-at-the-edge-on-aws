@@ -1,0 +1,34 @@
+!deployment/.typescript/cdk-solution-helper/index.js
+!jest.config.js
+*.d.ts
+node_modules
+!source/.typescript/lambda/**/*.js
+!source/lambda/**/*.js
+source/solution.context.json
+source/lambda/layers/jsonpath/python/*
+source/lambda/layers/aws_secure_media_delivery_python/python/*
+!source/lambda/layers/aws_secure_media_delivery_python/python/requirements.txt
+
+# CDK asset staging directory
+.cdk.staging
+cdk.out
+dist
+!**/cdk-solution-helper/index.js
+package-lock.json
+.venv
+deployment/global-s3-assets
+deployment/regional-s3-assets
+open-source/
+
+# Temporary folders
+tmp/
+temp/
+
+### VisualStudioCode ###
+.vscode/*
+
+### macOS ###
+.DS_Store
+
+**/coverage
+**/coverage-reports

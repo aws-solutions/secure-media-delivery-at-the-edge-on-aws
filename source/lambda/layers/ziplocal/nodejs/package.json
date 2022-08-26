@@ -1,0 +1,14 @@
+{
+  "name": "zip-local",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "zip-local": "^0.3.5"
+  },
+  "author": "",
+  "license": "ISC"
+}

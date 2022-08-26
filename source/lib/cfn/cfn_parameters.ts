@@ -1,0 +1,124 @@
+/*********************************************************************************************************************
+ *  Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.                                           *
+ *                                                                                                                    *
+ *  Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance    *
+ *  with the License. A copy of the License is located at                                                             *
+ *                                                                                                                    *
+ *      http://www.apache.org/licenses/LICENSE-2.0                                                                    *
+ *                                                                                                                    *
+ *  or in the 'license' file accompanying this file. This file is distributed on an 'AS IS' BASIS, WITHOUT WARRANTIES *
+ *  OR CONDITIONS OF ANY KIND, express or implied. See the License for the specific language governing permissions    *
+ *  and limitations under the License.                                                                                *
+ *********************************************************************************************************************/
+
+import { CfnParameter, Stack } from "aws-cdk-lib";
+import { Construct } from "constructs";
+
+interface ParameterGroup {
+  Label: { default: string };
+  Parameters: string[];
+}
+
+interface ParameterLabels {
+  [parameterLogicalId: string]: { default: string };
+}
+
+interface CloudFormationInterface {
+  ParameterGroups: ParameterGroup[];
+  ParameterLabels: ParameterLabels;
+}
+
+const getStackMetadata = (scope: Construct): { [key: string]: any } =>
+  Stack.of(scope).templateOptions.metadata || {};
+
+const CFN_INTERFACE_KEY = "AWS::CloudFormation::Interface";
+
+const createEmptyCfnInterface = (): CloudFormationInterface => ({
+  ParameterGroups: [],
+  ParameterLabels: {},
+});
+
+const getCfnInterface = (scope: Construct): CloudFormationInterface => {
+  const metadata = getStackMetadata(scope);
+  return metadata[CFN_INTERFACE_KEY]
+    ? metadata[CFN_INTERFACE_KEY]
+    : createEmptyCfnInterface();
+};
+
+const updateCfnInterface = (
+  cfnInterface: CloudFormationInterface,
+  scope: Construct
+): void => {
+  const metadata = getStackMetadata(scope);
+  metadata[CFN_INTERFACE_KEY] = cfnInterface;
+  Stack.of(scope).templateOptions.metadata = metadata;
+};
+
+const getGroupFromInterface = (
+  label: string,
+  cfnInterface: CloudFormationInterface
+): ParameterGroup | undefined =>
+  cfnInterface.ParameterGroups.find((group) => group.Label.default === label);
+
+const addGroupToInterface = (
+  label: string,
+  cfnInterface: CloudFormationInterface
+): ParameterGroup => {
+  const existingGroup = getGroupFromInterface(label, cfnInterface);
+  if (existingGroup) {
+    return existingGroup;
+  } else {
+    const newGroup = { Label: { default: label }, Parameters: [] };
+    cfnInterface.ParameterGroups.push(newGroup);
+    return newGroup;
+  }
+};
+
+const addParameterToGroup = (
+  parameter: CfnParameter,
+  group: ParameterGroup
+): void => {
+  if (group.Parameters.find((logicalId) => logicalId === parameter.logicalId)) {
+    return;
+  } else {
+    group.Parameters.push(parameter.logicalId);
+  }
+};
+
+export interface ParameterInterfaceProps {
+  scope: Construct;
+  parameter: CfnParameter;
+  groupLabel?: string;
+  parameterLabel?: string;
+}
+
+export interface ParametersInterfaceProps {
+  params: ParameterInterfaceProps[];
+}
+
+const addParameterToInterface = (
+  props: ParameterInterfaceProps
+): CfnParameter => {
+  const { scope, groupLabel, parameter, parameterLabel } = props;
+  const cfnInterface = getCfnInterface(scope);
+
+  if (groupLabel) {
+    const group = addGroupToInterface(groupLabel, cfnInterface);
+    addParameterToGroup(parameter, group);
+  }
+
+  if (parameterLabel) {
+    cfnInterface.ParameterLabels[parameter.logicalId] = {
+      default: parameterLabel,
+    };
+  }
+
+  updateCfnInterface(cfnInterface, scope);
+  return parameter;
+};
+
+export const addParametersToInterface = (props: ParametersInterfaceProps) => {
+  props.params.forEach((item) => {
+    addParameterToInterface(item);
+  });
+};
