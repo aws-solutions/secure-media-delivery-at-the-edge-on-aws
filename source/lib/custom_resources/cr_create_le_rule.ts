@@ -27,6 +27,8 @@ export interface IConfigProps {
   WAF_RULE_NAME_SSM_PARAM: string;
   WAF_RULE_ID_SSM_PARAM: string;
   DEPLOY_LE: boolean;
+  METRICS: boolean;
+  SOLUTION_IDENTIFIER: string;
 }
 
 export class CRCreateLEWafRule extends Construct {
@@ -152,8 +154,11 @@ export class CRCreateLEWafRule extends Construct {
         WCU: props.WCU,
         RULE_ID: props.WAF_RULE_ID_SSM_PARAM,
         RULE_NAME: props.WAF_RULE_NAME_SSM_PARAM,
-        DEPLOY_LE: props.DEPLOY_LE ? "1" : "0"
+        DEPLOY_LE: props.DEPLOY_LE ? "1" : "0",
+        METRICS: String(props.METRICS),
+        SOLUTION_IDENTIFIER: props.SOLUTION_IDENTIFIER
       },
+
       role: triggerRole,
     });
 

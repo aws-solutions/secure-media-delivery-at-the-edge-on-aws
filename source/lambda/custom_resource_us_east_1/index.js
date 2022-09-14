@@ -17,9 +17,9 @@ const zipLocal = require("zip-local");
 
 
 var AWS = require('aws-sdk');
-var lambda = new AWS.Lambda({ region: 'us-east-1' });
-const ssm = new AWS.SSM();
-const wafv2 = new AWS.WAFV2({ region: 'us-east-1' });
+var lambda = process.env.METRICS == "true" ? new AWS.Lambda({ customUserAgent: process.env.SOLUTION_IDENTIFIER, region: 'us-east-1' }) : new AWS.Lambda({ region: 'us-east-1' });
+const ssm = process.env.METRICS == "true" ? new AWS.SSM({ customUserAgent: process.env.SOLUTION_IDENTIFIER }) : new AWS.SSM();
+const wafv2 = process.env.METRICS == "true" ? new AWS.WAFV2({ customUserAgent: process.env.SOLUTION_IDENTIFIER, region: 'us-east-1' }) : new AWS.WAFV2({ region: 'us-east-1' });
 
 
 exports.handler = async (event, context) => {
