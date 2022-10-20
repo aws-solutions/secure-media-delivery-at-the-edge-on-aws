@@ -6,26 +6,33 @@ const HLS_STREAM = "hls";
 const DASH_STREAM = "dash";
 var CURRENT_STREAM = "";
 
+var qr = new QRious({
+  element: document.getElementById("qrcode"), 
+  size: 280
+});
+
 
 $('#hls').on('change', function () {
- console.log(HLS_STREAM);
  CURRENT_STREAM = HLS_STREAM;
- load(HLS_STREAM);
+ load();
 
 });
 
 $('#dash').on('change', function () {
-  console.log(DASH_STREAM);
   CURRENT_STREAM = DASH_STREAM;
-  load(DASH_STREAM);
+  load();
 
 });
 
-function load(type) {
-  putStreamTypeLabel(type)
+function load() {
+
+  putStreamTypeLabel(CURRENT_STREAM)
   resetAllDivText();
-  const idAsset = type == HLS_STREAM ? 1 : 2;
+  
+  const idAsset = CURRENT_STREAM == HLS_STREAM ? 1 : 2;
   const urlToGet = `${location.protocol}\/\/${location.hostname}/tokengenerate?id=` + idAsset;
+
+
   $.ajax({
     type: 'GET',
     url: urlToGet,
@@ -34,13 +41,28 @@ function load(type) {
       showVideo();
       hideErrorDiv();
 
-      var manifest_url = data;
+      const parsedData = JSON.parse(data);
+      var manifest_url = parsedData.playback_url;
+      var token_policy = parsedData.token_policy;
+
+      $('#referer').each(function(){ this.checked = token_policy.referer == 1 ? true : false });
+      $('#ip').each(function(){ this.checked = token_policy.ip == 1 ? true : false });
+      $('#ua').each(function(){ this.checked = token_policy.ua == 1 ? true : false });
+
+      $('#ipvalue').html(token_policy.ip_value);
+      $('#uavalue').html(token_policy.ua_value);
+      $('#referevalue').html(token_policy.referer_value);
+
+      
+
       var l = getLocation(manifest_url);
       var tokens = l.pathname.substring(1, l.pathname.indexOf('/', 1)).split(".");
       const jwtHeader = library.json.prettyPrint(JSON.parse(atob(tokens[1])));
       const jwtPayload = library.json.prettyPrint(JSON.parse(atob(tokens[2])));
 
-      showVideoMetadata(urlToGet, data, jwtHeader, jwtPayload);
+      showVideoMetadata(urlToGet, manifest_url, jwtHeader, jwtPayload);
+
+      qr.value = manifest_url;
 
       player.src({
         src: manifest_url
@@ -73,6 +95,30 @@ function load(type) {
 
 }
 
+function toggle () {
+
+  const ip = $('#ip:checked').val() ? 1 : 0;
+  const ua = $('#ua:checked').val() ? 1 : 0;
+  const referer = $('#referer:checked').val() ? 1 : 0;
+  const idAsset = CURRENT_STREAM == HLS_STREAM ? 1 : 2;
+  const urlToGet = `${location.protocol}\/\/${location.hostname}/updatetoken?id=${idAsset}&ip=${ip}&ua=${ua}&referer=${referer}`;
+  console.log("urltoget="+urlToGet);
+  $.ajax({
+    type: 'POST',
+    url: urlToGet,
+    success: function (data, status, xhr) {
+      console.log("Update token OK");
+      enableRevokeSessionButton();
+    },
+    error: function (data, status, xhr) {
+      console.log("Update token error:" + JSON.stringify(data));
+
+    }
+  });
+
+  
+}
+
 function putStreamTypeLabel(stream_type) {
   $("#stream_type").text(stream_type.toUpperCase() + ' stream');
 
@@ -83,6 +129,12 @@ function resetAllDivText() {
   $("#playback_url_value").text('');
   $('#jwt_header').text('');
   $('#jwt_payload').html('');
+  $("#video_div").addClass('d-none');
+
+  $('#ipvalue').html('');
+  $('#uavalue').html('');
+  $('#referevalue').html('');
+
 }
 
 
@@ -122,13 +174,14 @@ function showVideoMetadata(requestUrl, playbackUrl, jwtHeader, jwtPayload) {
   $("#playback_url_value").text(playbackUrl);
   $('#jwt_header').html(jwtHeader);
   $('#jwt_payload').html(jwtPayload);
+  $("#qrcode").removeClass('d-none');
 }
 
 function showVideoError(errorMsg) {
   $("#errorAsset").text(errorMsg);
 }
 function showResultDiv() {
-  $("#result").removeClass('d-none');
+  //$("#result").removeClass('d-none');
   $("#metadataDiv").removeClass('d-none');
 }
 
@@ -164,11 +217,7 @@ function loadingRevokeSessionButton() {
 
 $('#refreshtoken').on('click', function () {
 
-  if(CURRENT_STREAM =='hls'){
-    load('hls');
-  }else{
-    load('dash');
-  }
+    load();
 });
 
 
@@ -201,6 +250,4 @@ $('#sessionrevoke').on('click', function () {
   });
 
 });
-
-
 

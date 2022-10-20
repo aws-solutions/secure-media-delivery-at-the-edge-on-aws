@@ -11,7 +11,7 @@
  *  and limitations under the License.                                                                                *
  *********************************************************************************************************************/
  const aws = require('aws-sdk');
- var lambda = new aws.Lambda();
+ const lambda = new aws.Lambda();
  
 
 exports.handler = async (event, context) => {
@@ -21,7 +21,7 @@ exports.handler = async (event, context) => {
 
         console.log('Stream record: ', JSON.stringify(record));
 
-        var db_item = record.dynamodb.NewImage;
+        const db_item = record.dynamodb.NewImage;
         console.log("db_item="+JSON.stringify(db_item));
         console.log("db_item['score_threshold']="+db_item['score_threshold']);
         console.log("db_item['score_threshold']['N']="+db_item['score_threshold']['N']);
@@ -29,7 +29,7 @@ exports.handler = async (event, context) => {
             throw new Error('Score_threshold is lower than 1');
 
 
-        var params = {
+        const params = {
             FunctionName: process.env.SUBMIT_QUERY_FUNCTION,
             Environment: {
                 'Variables': {

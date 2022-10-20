@@ -1,7 +1,7 @@
 {
   "name": "aws-secure-media-delivery",
   "version": "1.0.0",
-  "description": "Node.js collection of modules of Secure Media Delivery Solution.",
+  "description": "Node.js collection of modules of Secure Media Delivery at the Edge on AWS Solution.",
   "main": "aws-secure-media-delivery.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

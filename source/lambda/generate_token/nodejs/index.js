@@ -54,12 +54,12 @@ exports.handler = async (event, context) => {
         viewer_ip = event.requestContext.http.sourceIp;
     }
 
-    var params = {
+    const params = {
         TableName: tableName,
         Key:{"id": id}
     };
 
-    var video_metadata = await docClient.get(params).promise();
+    const video_metadata = await docClient.get(params).promise();
     console.log("From DynamoDB:"+JSON.stringify(video_metadata));
     if(!video_metadata.Item){
         return {
@@ -68,9 +68,9 @@ exports.handler = async (event, context) => {
         };
     }
 
-    var endpoint_hostname = video_metadata.Item['endpoint_hostname'];
-    var video_url = video_metadata.Item['url_path'];
-    var token_policy = video_metadata.Item.token_policy;
+    const endpoint_hostname = video_metadata.Item['endpoint_hostname'];
+    const video_url = video_metadata.Item['url_path'];
+    const token_policy = video_metadata.Item.token_policy;
 
     if(token_policy['ip']) viewer_attributes['ip'] = viewer_ip;
 
@@ -112,10 +112,22 @@ exports.handler = async (event, context) => {
 	} else {
 		original_url = null;
 	}
-    let playback_url = await token.generate(viewer_attributes, original_url, token_policy);
+    const playback_url = await token.generate(viewer_attributes, original_url, token_policy);
+    const body = {
+        "playback_url": playback_url,
+        "token_policy" : {
+            "ip": token_policy.ip ? 1 : 0,
+            "ip_value": viewer_ip,
+            "ua": token_policy.headers.includes('user-agent') ? 1 : 0,
+            "ua_value": headers['user-agent'],
+            "referer": token_policy.headers.includes('referer') ? 1 : 0,
+            "referer_value": headers['referer']
+        }
+    };
     return {
         "statusCode": 200,
-        "body": playback_url
+        "body": 
+        JSON.stringify(body)
     };
 
 };

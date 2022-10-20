@@ -92,14 +92,46 @@ export class Api extends Construct {
     addCfnSuppressRules(generateToken, [{ id: 'W92', reason: 'No need for ReservedConcurrentExecutions, some are used only for the demo website, and others are not used in a concurrent mode.' }]);
 
 
-    const readStreamLogs = new logs.LogGroup(this, "ReadStreamLogs", {
+    const generateTokenLogs = new logs.LogGroup(this, "GenerateTokenLogs", {
       logGroupName: "/aws/lambda/" + generateToken.functionName,
       removalPolicy: RemovalPolicy.DESTROY,
       retention: logs.RetentionDays.ONE_MONTH,
     });
 
-    addCfnSuppressRules(readStreamLogs, [{ id: 'W84', reason: 'CloudWatch log group is always encrypted by default.' }]);
+    addCfnSuppressRules(generateTokenLogs, [{ id: 'W84', reason: 'CloudWatch log group is always encrypted by default.' }]);
 
+    //Lambda to update parameters for the token
+    const updateToken = new lambda.Function(this, "UpdateToken", {
+      functionName: Aws.STACK_NAME + "_UpdateToken",
+      runtime: lambda.Runtime.NODEJS_16_X,
+      code: lambda.Code.fromAsset("lambda/update_token"),
+      handler: "index.handler",
+      environment: {
+        STACK_NAME: Aws.STACK_NAME,
+        TABLE_NAME: demoAssetsTable.tableName,
+        SOLUTION_IDENTIFIER: `AwsSolution/${props.configuration.solutionId}/${props.configuration.solutionVersion}`,
+        METRICS: String(props.configuration.main.metrics)
+      },
+      layers: [cloudfrontTokenLayer],
+    });
+
+    const updateTokenLogs = new logs.LogGroup(this, "UpdateTokenLogs", {
+      logGroupName: "/aws/lambda/" + updateToken.functionName,
+      removalPolicy: RemovalPolicy.DESTROY,
+      retention: logs.RetentionDays.ONE_MONTH,
+    });
+
+    addCfnSuppressRules(updateTokenLogs, [{ id: 'W84', reason: 'CloudWatch log group is always encrypted by default.' }]);
+
+
+
+    addCfnSuppressRules(updateToken, [{ id: 'W58', reason: 'Lambda has CloudWatch permissions by using service role AWSLambdaBasicExecutionRole' }]);
+    addCfnSuppressRules(updateToken, [{ id: 'W89', reason: 'We don t have any VPC in the stack, we only use serverless services' }]);
+    addCfnSuppressRules(updateToken, [{ id: 'W92', reason: 'No need for ReservedConcurrentExecutions, some are used only for the demo website, and others are not used in a concurrent mode.' }]);
+
+    demoAssetsTable.grantReadWriteData(updateToken);
+
+        
 
     //Lambda used to add manually a session to be revoked into a DynamoDB Table
     const saveManualSession = new lambda.Function(this, "SaveManualSession", {
@@ -121,6 +153,16 @@ export class Api extends Construct {
     addCfnSuppressRules(saveManualSession, [{ id: 'W92', reason: 'No need for ReservedConcurrentExecutions, some are used only for the demo website, and others are not used in a concurrent mode.' }]);
 
 
+    const saveManualSessionLogs = new logs.LogGroup(this, "saveManualSessionLogs", {
+      logGroupName: "/aws/lambda/" + saveManualSession.functionName,
+      removalPolicy: RemovalPolicy.DESTROY,
+      retention: logs.RetentionDays.ONE_MONTH,
+    });
+
+    addCfnSuppressRules(saveManualSessionLogs, [{ id: 'W84', reason: 'CloudWatch log group is always encrypted by default.' }]);
+
+
+
     demoAssetsTable.grantReadData(generateToken);
     props.sessionsTable.grantReadWriteData(saveManualSession);
 
@@ -130,9 +172,10 @@ export class Api extends Construct {
     new Endpoints(this, "Endpoints", {
       generateTokenLambdaFunction: generateToken,
       saveSessionToDDBLambdaFunction: saveManualSession,
+      updateTokenLambdaFunction: updateToken,
       sig4LambdaVersionParamName: props.sig4LambdaVersionParamName,
       sig4LambdaRoleArn: props.sig4LambdaRoleArn,
-      demoWebsite: props.configuration.api?.demo as boolean
+      demo: props.configuration.api?.demo as boolean
     });
 
     //build a CloudWatch Dashboard to display some metrics from generateToken Lambda

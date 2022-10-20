@@ -12,7 +12,7 @@
  *********************************************************************************************************************/
 
 const aws = require('aws-sdk');
-var dynamodb = process.env.METRICS == "true" ?  new aws.DynamoDB({customUserAgent: process.env.SOLUTION_IDENTIFIER}) :  new aws.DynamoDB();
+const dynamodb = process.env.METRICS == "true" ?  new aws.DynamoDB({customUserAgent: process.env.SOLUTION_IDENTIFIER}) :  new aws.DynamoDB();
  
 
 exports.handler = async (event, context) => {

@@ -19,9 +19,10 @@ test('Create endpoints - demoWebsite=true', () => {
   new Endpoints(stack, "Endpoints", {
     generateTokenLambdaFunction: myLmbda,
     saveSessionToDDBLambdaFunction: myLmbda,
+    updateTokenLambdaFunction: myLmbda,
     sig4LambdaVersionParamName: "sig4LambdaVersionParamName",
     sig4LambdaRoleArn: "sig4LambdaRoleArn",
-    demoWebsite: true
+    demo: true
   });
   // THEN
 
@@ -50,9 +51,10 @@ test('Create endpoints - demoWebsite=false', () => {
   new Endpoints(stack, "Endpoints", {
     generateTokenLambdaFunction: myLmbda,
     saveSessionToDDBLambdaFunction: myLmbda,
+    updateTokenLambdaFunction: myLmbda,
     sig4LambdaVersionParamName: "sig4LambdaVersionParamName",
     sig4LambdaRoleArn: "sig4LambdaRoleArn",
-    demoWebsite: false
+    demo: false
   });
   // THEN
 

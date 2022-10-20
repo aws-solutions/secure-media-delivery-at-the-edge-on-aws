@@ -362,11 +362,19 @@ export class GetInputParameters extends Construct {
     }
 
     if (configuration.api) {
-      returnObject.api = {
-        demo: true,
-      };
 
+      if (configuration.main.rotate_secrets_pattern === "P") {
+        returnObject.api = {
+          demo: true,
+        };
+      }else{
+        returnObject.api = {
+          demo: configuration.api.demo,
+        };
+      }
+     
     }
+
     returnObject.solutionId = configuration.solutionId;
     returnObject.solutionVersion = configuration.solutionVersion;
     

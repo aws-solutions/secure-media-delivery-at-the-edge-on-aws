@@ -32,10 +32,13 @@ function checkJWTToken(token, uri, session_id, http_headers, querystrings, ip, n
     var signatureSeg = segments[2];
 
     // base64url decode and parse JSON
+    var header;
+    var payload;
+
 
     try{    
-        var header = JSON.parse(_base64urlDecode(headerSeg));//'exports' non supported by CFF. Only used to run unit tests. Will be removed before deployment.
-        var payload = JSON.parse(_base64urlDecode(payloadSeg));//'exports' non supported by CFF. Only used to run unit tests. Will be removed before deployment.
+        header = JSON.parse(_base64urlDecode(headerSeg));
+        payload = JSON.parse(_base64urlDecode(payloadSeg));
 
     } catch(e){
         console.log(e);

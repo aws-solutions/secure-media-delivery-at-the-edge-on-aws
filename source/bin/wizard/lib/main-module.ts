@@ -12,8 +12,8 @@ const coreQuestions = [
     name: "stack_name",
     message: "[Base module] --> Stack name",
     validate: (value: string) =>
-      Joi.string().required().validate(value).error
-        ? "The name of the stack is mandatory"
+        !/^[A-Za-z][A-Za-z0-9-]*$/.test(value)
+        ? "The name of the stack is mandatory and can include letters (A-Z and a-z), numbers (0-9), and dashes (-)."
         : true,
   },
   {
@@ -91,7 +91,7 @@ const rotation_datetime_question = [
     type: "text",
     name: "value",
     message:
-      "[Base module] --> At what time of the day should take place \n (use the format HH:mm)",
+      "[Base module] --> At what time of the day should take place (use the format HH:mm, events use UTC+0 time zone) ",
     validate: (value: string) =>
       Joi.string()
         .regex(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/)

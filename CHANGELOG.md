@@ -11,3 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.1] - 2022-09-05
 ### Added
 - Add metrics for Lambda Custom Resource
+
+## [1.1.0] - 2022-10-15
+### Added
+- Upgrade wizard enforce http or https protocol
+- Upgrade demo website with QRcode, token parameters selector and links to solutions page
+- Add constraints in the wizard for stack name and video asset url format
+- Add suffix on solution name

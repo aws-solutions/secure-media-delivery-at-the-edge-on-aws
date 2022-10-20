@@ -13,9 +13,9 @@
 
 function buildSecondPartQueryString(lookbackMinutes) {
 
-    var nowDate = new Date();
+    const nowDate = new Date();
 
-    var previousDate = new Date(nowDate.getTime() - lookbackMinutes * 60000);
+    const previousDate = new Date(nowDate.getTime() - lookbackMinutes * 60000);
     console.log("Query date between: " + previousDate + " and " + nowDate);
     var query_string = "";
     if (previousDate.getDay() == nowDate.getDay()){
@@ -97,7 +97,7 @@ function generateAthenaQuery(query_param) {
     console.log("Athena params=" + JSON.stringify(query_param));
     var thirdPartPreamble = "";
     var queryStringSecond_part = "";
-    var queryStringFirstPart = `WITH Q1 AS (
+    const queryStringFirstPart = `WITH Q1 AS (
          SELECT
                split(split_part(uri, '/',2),'.') AS path_first_part_array,
                ${query_param['uri_column_name']} AS uri,
@@ -115,7 +115,7 @@ function generateAthenaQuery(query_param) {
         thirdPartPreamble = 'WHERE '
     }
 
-    var queryStringThirdPart = `${thirdPartPreamble}CAST(${query_param['status_column_name']} AS INTEGER) IN (200, 206)
+    const queryStringThirdPart = `${thirdPartPreamble}CAST(${query_param['status_column_name']} AS INTEGER) IN (200, 206)
       AND CAST(${query_param['response_bytes_column_name']} AS INTEGER) > 1024),
    Q2 AS (
       SELECT

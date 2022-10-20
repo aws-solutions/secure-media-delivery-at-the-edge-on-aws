@@ -39,9 +39,10 @@ import { addCfnSuppressRules } from "../cfn_nag/cfn_nag_utils";
 export interface IConfigProps {
   generateTokenLambdaFunction: IFunction;
   saveSessionToDDBLambdaFunction: IFunction;
+  updateTokenLambdaFunction: IFunction;
   sig4LambdaVersionParamName: string;
   sig4LambdaRoleArn: string;
-  demoWebsite: boolean;
+  demo: boolean;
 }
 
 export class Endpoints extends Construct {
@@ -96,8 +97,7 @@ export class Endpoints extends Construct {
       { id: "W41", reason: "Encryption done" },
     ]);
 
-    const folder = props.demoWebsite ? "demo_website" : "empty_demo_website";
-
+    const folder = props.demo ? "demo_website" : "empty_demo_website";
     new s3deploy.BucketDeployment(this, "DeployWebsite", {
       sources: [s3deploy.Source.asset("resources/" + folder)],
       destinationBucket: hostingBucket,
@@ -146,6 +146,15 @@ export class Endpoints extends Construct {
       integration: new HttpLambdaIntegration(
         "RevokeSessionIntegration",
         props.saveSessionToDDBLambdaFunction
+      ),
+    });
+
+    httpApi.addRoutes({
+      path: "/updatetoken",
+      methods: [apigwv2.HttpMethod.POST],
+      integration: new HttpLambdaIntegration(
+        "UpdateTokenIntegration",
+        props.updateTokenLambdaFunction
       ),
     });
 
@@ -234,7 +243,7 @@ export class Endpoints extends Construct {
     const s3origin = new origins.S3Origin(hostingBucket);
 
     const distribution = new cloudfront.Distribution(this, "Distribution", {
-      comment: Aws.STACK_NAME + " - Demo website Secure Media Delivery",
+      comment: Aws.STACK_NAME + " - Demo website Secure Media Delivery at the Edge on AWS",
       defaultRootObject: "index.html",
       enableLogging: true,
       logBucket: s3Logs,
@@ -272,6 +281,23 @@ export class Endpoints extends Construct {
           allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
         },
         "/sessionrevoke": {
+          origin: httpApiOrigin,
+          edgeLambdas: [
+            {
+              functionVersion: lambdaEdge,
+              eventType: cloudfront.LambdaEdgeEventType.ORIGIN_REQUEST,
+            },
+          ],
+          viewerProtocolPolicy:
+            cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+          cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
+          originRequestPolicy: myOriginRequestPolicy,
+          responseHeadersPolicy:
+            cloudfront.ResponseHeadersPolicy
+              .CORS_ALLOW_ALL_ORIGINS_WITH_PREFLIGHT,
+          allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
+        }, 
+        "/updatetoken": {
           origin: httpApiOrigin,
           edgeLambdas: [
             {

@@ -32,9 +32,9 @@
      var responseSecret = await secretsmanager.getSecretValue(params).promise();
      console.log(responseSecret);
  
-     var temporarySecretAsJson = JSON.parse(responseSecret.SecretString);
-     var temporarySecretKeyName = Object.keys(temporarySecretAsJson)[0];
-     var temporarySecretKeyValue = Object.values(temporarySecretAsJson)[0];
+     const temporarySecretAsJson = JSON.parse(responseSecret.SecretString);
+     const temporarySecretKeyName = Object.keys(temporarySecretAsJson)[0];
+     const temporarySecretKeyValue = Object.values(temporarySecretAsJson)[0];
      
      //get primary secret
      params = {
@@ -43,10 +43,9 @@
  
      responseSecret = await secretsmanager.getSecretValue(params).promise();
      
-     var primarySecretAsJson = JSON.parse(responseSecret.SecretString);
- 
-     var primarySecretKeyName = Object.keys(primarySecretAsJson)[0];
-     var primarySecretKeyValue = Object.values(primarySecretAsJson)[0];
+     const primarySecretAsJson = JSON.parse(responseSecret.SecretString);
+     const primarySecretKeyName = Object.keys(primarySecretAsJson)[0];
+     const primarySecretKeyValue = Object.values(primarySecretAsJson)[0];
  
      var objectSecondary = {};
      objectSecondary[primarySecretKeyName] = primarySecretKeyValue;

@@ -51,8 +51,8 @@ test('Main stack', () => {
   
   // THEN
   const template = Template.fromStack(stack);
-  template.resourceCountIs("AWS::Lambda::Function", 9);
-  template.resourceCountIs("AWS::Logs::LogGroup", 6);
+  template.resourceCountIs("AWS::Lambda::Function", 10);
+  template.resourceCountIs("AWS::Logs::LogGroup", 8);
   template.resourceCountIs("AWS::StepFunctions::StateMachine", 1);
 
 });

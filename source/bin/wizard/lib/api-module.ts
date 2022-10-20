@@ -51,14 +51,15 @@ const selectVideoStreamType = [
 ];
 
 function hostQuestions(type: string) {
+
   return [
     {
       type: "text",
       name: "hostname",
-      message: "[API][" + type + "] --> Hostname used for asset delivery",
+      message: "[API][" + type + "] --> Domain name used for asset delivery (http:// or https://)",
       validate: (value: string) =>
-        Joi.string().required().validate(value).error
-          ? "Hostname is mandatory"
+        !value.startsWith('https://') && !value.startsWith('http://')
+          ? "Hostname is mandatory and must start with http:// or https://"
           : true,
     },
     {
@@ -66,9 +67,8 @@ function hostQuestions(type: string) {
       name: "url_path",
       message: "[API][" + type + "] --> URL path for existing playable asset",
       validate: (value: string) =>
-        Joi.string().required().validate(value).error
-          ? "URL path for existing playable asset is mandatory"
-          : true,
+        !value.startsWith('/') ? "URL path is mandatory and must start with /" : true,
+
     },
     {
       type: "select",

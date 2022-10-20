@@ -28,7 +28,7 @@ export class Secrets extends Construct {
 
     const primarySecret = new secretsmanager.Secret(this, "Primary", {
       secretName: Aws.STACK_NAME + "_PrimarySecret",
-      description: "Primary secret for Secure Media Stream Delivery",
+      description: "Primary secret for Secure Media Delivery at the Edge on AWS",
       generateSecretString: {
         secretStringTemplate: JSON.stringify({ MY_PRIMARY_KEY: "" }),
         generateStringKey: "MY_PRIMARY_KEY",
@@ -40,7 +40,7 @@ export class Secrets extends Construct {
 
     const secondarySecret = new secretsmanager.Secret(this, "Secondary", {
       secretName: Aws.STACK_NAME + "_SecondarySecret",
-      description: "Secondary secret for Secure Media Stream Delivery",
+      description: "Secondary secret for Secure Media Delivery at the Edge on AWS",
       generateSecretString: {
         secretStringTemplate: JSON.stringify({ MY_SECONDARY_KEY: "" }),
         generateStringKey: "MY_SECONDARY_KEY",
@@ -52,7 +52,7 @@ export class Secrets extends Construct {
 
     const temporarySecret = new secretsmanager.Secret(this, "Temporary", {
       secretName: Aws.STACK_NAME + "_TemporarySecret",
-      description: "Temporary secret for Secure Media Stream Delivery",
+      description: "Temporary secret for Secure Media Delivery at the Edge on AWS",
       generateSecretString: {
         secretStringTemplate: JSON.stringify({ MY_TEMPORARY_KEY: "" }),
         generateStringKey: "MY_TEMPORARY_KEY",

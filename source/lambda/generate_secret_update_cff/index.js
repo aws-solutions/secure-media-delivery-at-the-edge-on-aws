@@ -14,21 +14,21 @@
 
  
  const secretsmanager = process.env.METRICS == "true" ? new aws.SecretsManager({customUserAgent: process.env.SOLUTION_IDENTIFIER}) : new aws.SecretsManager();
- var cloudfront = process.env.METRICS == "true" ?  new aws.CloudFront({customUserAgent: process.env.SOLUTION_IDENTIFIER}) :  new aws.CloudFront();
- 
+ const cloudfront = process.env.METRICS == "true" ?  new aws.CloudFront({customUserAgent: process.env.SOLUTION_IDENTIFIER}) :  new aws.CloudFront();
 
- var crypto = require("crypto");
+
+ const crypto = require("crypto");
  const fs = require('fs');
  
  
  
  function generateSecretKey() {
  
-     var randomKeySuffix = crypto.randomBytes(10).toString('hex');
-     var dateObj = new Date();
-     var month = String(dateObj.getMonth() + 1).padStart(2, '0');
-     var day = String(dateObj.getUTCDate());
-     var year = String(dateObj.getUTCFullYear());
+     const randomKeySuffix = crypto.randomBytes(10).toString('hex');
+     const dateObj = new Date();
+     const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+     const day = String(dateObj.getUTCDate());
+     const year = String(dateObj.getUTCFullYear());
  
      var nowDate = year + month + day;
      return nowDate + '_' + randomKeySuffix;
@@ -113,8 +113,8 @@
          console.log("Initialize temporary secret")
  
          //update temporary secret  with a new value
-         var newSecretKey = generateSecretKey();
-         var newSecretValue = generateSecretValue();
+         const newSecretKey = generateSecretKey();
+         const newSecretValue = generateSecretValue();
          var objectTemporary = {};
          objectTemporary[newSecretKey] = newSecretValue;
          var params = {
@@ -131,7 +131,7 @@
          var newPrimarySecretValue = generateSecretValue();
          var objectPrimary = {};
          objectPrimary[newPrimarySecretKey] = newPrimarySecretValue;
-         var params = {
+         params = {
              SecretId: primaryKeyName,
              SecretString: JSON.stringify(objectPrimary)
          };
@@ -160,8 +160,8 @@
          //Lambda triggered by the SF to rotate the secrets
  
          // Update temporary secret with a new value
-         var newSecretKey = generateSecretKey();
-         var newSecretValue = generateSecretValue();
+         const newSecretKey = generateSecretKey();
+         const newSecretValue = generateSecretValue();
          var objectTemporary = {};
          objectTemporary[newSecretKey] = newSecretValue;
  

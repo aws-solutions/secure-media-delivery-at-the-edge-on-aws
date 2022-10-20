@@ -108,3 +108,7 @@ pre {
 .my-btn {
   width: 200px;
 }
+
+body {
+  font-weight: 250;
+}

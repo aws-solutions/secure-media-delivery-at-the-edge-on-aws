@@ -16,8 +16,8 @@ let path = require("path");
 const zipLocal = require("zip-local");
 
 
-var AWS = require('aws-sdk');
-var lambda = process.env.METRICS == "true" ? new AWS.Lambda({ customUserAgent: process.env.SOLUTION_IDENTIFIER, region: 'us-east-1' }) : new AWS.Lambda({ region: 'us-east-1' });
+const AWS = require('aws-sdk');
+const lambda = process.env.METRICS == "true" ? new AWS.Lambda({ customUserAgent: process.env.SOLUTION_IDENTIFIER, region: 'us-east-1' }) : new AWS.Lambda({ region: 'us-east-1' });
 const ssm = process.env.METRICS == "true" ? new AWS.SSM({ customUserAgent: process.env.SOLUTION_IDENTIFIER }) : new AWS.SSM();
 const wafv2 = process.env.METRICS == "true" ? new AWS.WAFV2({ customUserAgent: process.env.SOLUTION_IDENTIFIER, region: 'us-east-1' }) : new AWS.WAFV2({ region: 'us-east-1' });
 
@@ -40,7 +40,7 @@ async function createLambdaEdge() {
     const le_zip_path = "/tmp/lambda_edge.zip";
     const le_path = "./le.js";
     const tmp_le_path = "/tmp/le.js";
-    var code_path = path.resolve(le_zip_path)
+    const code_path = path.resolve(le_zip_path)
     try {
         //zipping le.js
         console.log("copy " + le_path + " to " + tmp_le_path);
@@ -50,7 +50,7 @@ async function createLambdaEdge() {
         zipLocal.sync.zip(tmp_le_path).compress().save(le_zip_path);
         console.log("zip created");
         // Creates Edge Lambda
-        var params = {
+        const params = {
             Code: {
                 ZipFile: fs.readFileSync(code_path)
             },
@@ -113,7 +113,7 @@ async function publishLEVersion(functionArn) {
 async function createWafRuleGroup() {
     try {
         // Creates WAF Rule Group
-        var params = {
+        const params = {
             Capacity: parseInt(process.env.WCU),
             Name: process.env.RULE_NAME,
             Scope: 'CLOUDFRONT',
@@ -148,7 +148,7 @@ async function saveToSSM(paramName, paramValue) {
         Type: 'String',
         Overwrite: true
     };
-    var request = await ssm.putParameter(params).promise();
+    const request = await ssm.putParameter(params).promise();
     return request.Parameter;
 }
 

@@ -1,190 +1,277 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="shortcut icon" href="img/favicon.ico"/>
-    <title>Secure Media Streaming at Edge Solution</title>
 
-    <!-- Bootstrap core CSS -->
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="shortcut icon" href="img/favicon.ico" />
+  <title>Secure Media Delivery at the Edge on AWS Solution</title>
 
-    <link href="https://unpkg.com/video.js/dist/video-js.css" rel="stylesheet">
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <!-- Custom styles for this template -->
-    <link href="css/app.css" rel="stylesheet">
-  </head>
+  <link href="https://unpkg.com/video.js/dist/video-js.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js" integrity="sha384-Dr98ddmUw2QkdCarNQ+OL7xLty7cSxgR0T7v1tq4UErS/qLV0132sBYTolRAFuOV" crossorigin="anonymous"></script>
 
-  <body>
+  <!-- Custom styles for this template -->
+  <link href="css/app.css" rel="stylesheet">
+</head>
 
-    <header>
+<body>
 
-      <div class="navbar navbar-dark bg-dark box-shadow">
-        <div class="container d-flex justify-content-between">
-          <a href="#" class="navbar-brand d-flex align-items-center">
-            <img class="header-logo mx-2" src="img/smile.png" alt="logo">
-            <strong>Secure Media Streaming at Edge Solution</strong>
-          </a>
+  <header>
 
-        </div>
-      </div>
-    </header>
-
-
-
-    <section class="header-section text-center">
-      <div class=" mt-4 container">
-        <h1 class="jumbotron-heading">Secure Media Streaming at Edge</h1>
-        <p class="lead text-muted">This is a demo website for Secure Media Delivery implementation that can be used for testing the solution and troubleshooting.</p>
-        <p class="lead text-muted">This is only for demo purposes and should not be used in production.</a></p>
-        <p>
-
-        </p>
-      </div>
-    </section>
-
-    <div class="album py-5 bg-light" id="result">
-
-      <section class="header-section text-center">
-        <div class="row justify-content-center">
-          <div role="alert">
-            <div class="btn-group btn-group-toggle" data-toggle="buttons">
-              <label class="btn btn-secondary my-btn">
-                <input type="radio" name="options" id="hls" autocomplete="off"> HLS
-              </label>
-              <label class="btn btn-secondary my-btn">
-                <input type="radio" name="options" id="dash" autocomplete="off"> DASH
-              </label>
-
-            </div>
-          </div>
-        </div>
-
-      </section>
-      <hr>
-      <div class="container">
-
-
-
-        <div class="row"></div>
-
-        <div class="row" id="video_div">
-          <div class="col-md-12 " >
-
-            <div class="card box-shadow">
-              <div class="d-flex justify-content-center bg-dark" >
-                <video-js id="my_video_1" class="vjs-default-skin" controls preload="auto" width="800" height="600">
-
-                  </video-js>
-
-            </div>
-              <div class="card-body">
-                <h5 class="card-title" id="stream_type"></h5>
-
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="row">
-          <div class="col-md-12 ">
-          <div id="errorAsset" class="alert alert-danger d-none text-center" role="alert">
-          </div>
-          </div>
-
-        </div>
-
-        <div class="row mt-4 d-none" id="metadataDiv">
-          <div class="pl-0 col-md-5 ">
-
-            <div class="col-md-12 ">
-              <div class="card mb-4 box-shadow">
-                <div class="card-header">
-                  Request URL
-                </div>
-                <div class="card-body">
-                  <p class="card-text" id="request_url_value"></p>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-md-12 ">
-              <div class="card mb-4 box-shadow">
-                <div class="card-header">
-                  Playback URL
-                </div>
-                <div class="card-body">
-                  <p class="card-text" id="playback_url_value">AA.BB.CC</p>
-                </div>
-              </div>
-            </div>
-            <div class="row mt-3">
-              <div class="col-md-2 text-center"></div>
-              <div class="col-md-8 text-center">
-                <button id="sessionrevoke" type="button" class="btn btn-primary btn-lg btn-block">Revoke current session</button>
-              </div>
-              <div class="col-md-2 text-center"></div>
-            </div>
-            <div class="row mt-3">
-              <div class="col-md-2 text-center"></div>
-            <div class="col-md-8 text-center">
-              <button id="refreshtoken" type="button" class="btn btn-primary btn-lg btn-block">Refresh token</button>
-            </div>
-            <div class="col-md-2 text-center"></div>
-          </div>
-
-          </div>
-
-          <div class="col-md-7 ">
-
-            <div class="pr-0 col-md-12 ">
-              <div class="card mb-4 box-shadow">
-                <div class="card-header">
-                  JWT Token
-                </div>
-                <div class="card-body">
-                  <p class="card-text"></p>
-                  <h5 class="card-title">HEADER</h5>
-                  <pre><code id="jwt_header"></code></pre>
-                  <h5 class="card-title">PAYLOAD</h5>
-                  <pre><code id="jwt_payload"></code></pre>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-
+    <div class="navbar navbar-dark bg-dark box-shadow">
+      <div class="container d-flex justify-content-between">
+        <a href="#" class="navbar-brand d-flex align-items-center">
+          <img class="header-logo mx-2" src="img/smile.png" alt="logo">
+          <strong>Secure Media Delivery at the Edge on AWS Solution</strong>
+        </a>
 
       </div>
     </div>
+  </header>
+
+
+
+  <section class="header-section text-center">
+    <div class=" mt-4 container">
+      <h1 class="jumbotron-heading">Secure Media Delivery at the Edge on AWS</h1>
+      <p class="lead text-muted">This is a demo website for Secure Media Delivery implementation that can be used for
+        testing the solution and troubleshooting.</p>
+      <h6>This is only for demo purposes and should not be used in production.</h6>
+
+
+      </p>
+    </div>
+  </section>
+
+  <section class="header-section text-center">
+    <div class="row justify-content-center">
+      <div role="alert">
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+          <label class="btn btn-secondary my-btn">
+            <input type="radio" name="options" id="hls" autocomplete="off"> HLS
+          </label>
+          <label class="btn btn-secondary my-btn">
+            <input type="radio" name="options" id="dash" autocomplete="off"> DASH
+          </label>
+
+        </div>
+      </div>
+    </div>
+
+  </section>
+  <hr>
+  <div class="container">
+
+
+
+    <div class="row"></div>
+
+    <div class="row" id="video_div">
+      <div class="col-md-12 ">
+
+        <div class="card box-shadow">
+          <div class="d-flex justify-content-center bg-dark">
+            <video-js id="my_video_1" class="vjs-default-skin" controls preload="auto" width="800" height="600">
+
+            </video-js>
+
+          </div>
+          <div class="card-body">
+            <h5 class="card-title" id="stream_type"></h5>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="col-md-12 ">
+        <div id="errorAsset" class="alert alert-danger d-none text-center" role="alert">
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row mt-4 d-none" id="metadataDiv">
+      <div class="pl-0 col-md-5 ">
+
+        <div class="col-md-12 ">
+          <div class="card mb-4 box-shadow">
+            <div class="card-header">
+              Request URL
+            </div>
+            <div class="card-body">
+              <p class="card-text" id="request_url_value"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12 ">
+          <div class="card mb-4 box-shadow">
+            <div class="card-header">
+              Playback URL
+            </div>
+            <div class="card-body">
+              <p class="card-text" id="playback_url_value">AA.BB.CC</p>
+            </div>
+
+
+          </div>
+
+          <hr>
+
+          <div class="col-md-12 text-center">
+            <button id="sessionrevoke" type="button" class="btn btn-primary btn-lg btn-block">Revoke current
+              session</button>
+          </div>
+
+          <hr>
+
+          <div class="card mb-4 box-shadow">
+            <div class="card-header">
+              Playback URL QR Code
+            </div>
+            <div class="card-body text-center">
+              
+              <canvas id="qrcode" class="d-none"></canvas>
+                 
+
+            </div>
+
+
+          </div>
+
+
+        </div>
 
 
 
 
-    <!-- Bootstrap core JavaScript
+      </div>
+
+      <div class="col-md-7 ">
+
+        <div class="pr-0 col-md-12 ">
+          <div class="card mb-4 box-shadow">
+            <div class="card-header">
+              Choose parameters to secure token
+            </div>
+            <div class="card-body">
+
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input btn-danger" id="ip" onclick="toggle()" unchecked="">
+                <label class="custom-control-label" for="ip">Enable/Disable IP address in Token</label>
+              </div>
+
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input btn-danger" id="ua" onclick="toggle()" unchecked="">
+                <label class="custom-control-label" for="ua">Enable/Disable User Agent in Token</label>
+              </div>
+
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input btn-danger" id="referer" onclick="toggle()"
+                  unchecked="">
+                <label class="custom-control-label" for="referer">Enable/Disable Referer in Token</label>
+              </div>
+
+              <hr>
+
+              <h5 class="card-title">Viewer attributes</h5>
+              <div >
+                  
+                  <dl class="row">
+                    <dd class="col-sm-3">IP address</dd>
+                    <dd class="col-sm-9" id="ipvalue"><div></dd>
+                  
+                    <dd class="col-sm-3">User Agent</dd>
+                    <dd class="col-sm-9" id="uavalue"> </dd>
+                    
+                    <dd class="col-sm-3">Referer</dd>
+                    <dd class="col-sm-9" id="referevalue"> </dd>
+                  </dl>
+
+              </div>
+
+              
+              <hr>
+
+              <div class="col-md-12 text-center">
+                <button id="refreshtoken" type="button" class="btn btn-primary btn-lg btn-block">Refresh token</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="pr-0 col-md-12 ">
+          <div class="card mb-4 box-shadow">
+            <div class="card-header">
+              JWT Token
+            </div>
+            <div class="card-body">
+              <p class="card-text"></p>
+              <h5 class="card-title">Header</h5>
+              <pre><code id="jwt_header"></code></pre>
+              <h5 class="card-title">Payload</h5>
+              <pre><code id="jwt_payload"></code></pre>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+    </div>
+
+
+  </div>
+
+  <hr>
+
+  <section class="header-section">
+    <div class=" mt-4 container">
+     
+      Resources
+      <ul>
+        <li><a href="https://aws.amazon.com/solutions/implementations/secure-media-delivery-at-the-edge/" target="_blank" rel="noopener">Solution landing page</a></li>
+        <li><a href="https://docs.aws.amazon.com/solutions/latest/secure-media-delivery-at-the-edge/welcome.html"  target="_blank" rel="noopener">Implementation Guide</a></li>
+        <li><a href="https://github.com/aws-solutions/secure-media-delivery-at-the-edge"  target="_blank" rel="noopener">Source Code on AWS Solutions</a></li>
+        <li><a href="https://docs.aws.amazon.com/solutions/latest/secure-media-delivery-at-the-edge/access-tokens-management-guide.html"  target="_blank" rel="noopener">Customize Token Parameters</a></li>
+      </ul> 
+      
+    </div>
+  </section>
+
+  <script type="text/javascript">
+    
+    </script>
+
+  <!-- Bootstrap core JavaScript
       ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
-      integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-      crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
-      integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-      crossorigin="anonymous"></script>
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
+    integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>
 
 
-      <script src="https://unpkg.com/video.js/dist/video.js"></script>
-      <script src="https://unpkg.com/@videojs/http-streaming/dist/videojs-http-streaming.js"></script>
+  <script src="https://unpkg.com/video.js/dist/video.js"></script>
+  <script src="https://unpkg.com/@videojs/http-streaming/dist/videojs-http-streaming.js"></script>
 
-  </body>
+</body>
 
-  <script src="js/main.js"></script>
+<script src="js/main.js"></script>
 
 
 </html>

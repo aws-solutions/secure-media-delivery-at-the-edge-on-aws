@@ -62,6 +62,14 @@ class AWS {
           };
         }
       }));
+
+      update = jest.fn().mockImplementation(() => ({
+        promise: function () {
+          return "";
+        }
+      }));
+
+      
     }
 
     putItem = jest.fn().mockImplementation(() => ({
@@ -69,6 +77,8 @@ class AWS {
         return "";
       }
     }));
+
+
 
     query = jest.fn(param => {
       return {
