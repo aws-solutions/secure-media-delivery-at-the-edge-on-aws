@@ -3,7 +3,7 @@
 The Secure Media Delivery at the Edge solution protects your premium video content delivered through Amazon CloudFront from unauthorized access. The solution offers an additional layer of security based on individual access tokens added to the delivery URL. Existing or new CloudFront configurations used for Live Streaming and VOD workloads can benefit from this solution, whereby streaming operations engineers can control access to video assets by issuing individual tokens for each authorized viewer, verified at the Edge by CloudFront Functions.
 
 ## On this Page
-- [Secure Media Delivery at the Edge](#secure-media-delivery-at-the-edge)
+- [Secure Media Delivery at the Edge on AWS](#secure-media-delivery-at-the-edge-on-aws)
   - [On this Page](#on-this-page)
   - [Architecture Overview](#architecture-overview)
   - [Deployment](#deployment)
@@ -37,7 +37,7 @@ The Secure Media Delivery at the Edge solution protects your premium video conte
 ## Architecture Overview
 
 <div align="center">
-  <img src="architecture.png" />
+  <img src="source/assets/diagrams/architecture-diagram-v_1-0_0.jpg" />
   <div align="center"><sub>Secure media stream delivery (click to enlarge)</sub></div>
 </div>
 
