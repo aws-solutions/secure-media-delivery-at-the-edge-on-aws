@@ -41,8 +41,9 @@ exports.handler = async (event, context) => {
                 "Item": myItem
             }).promise()
             console.log(`Item inserted, sessionid=${item['Data'][0]['VarCharValue']}`);            
-            return "OK";
+            
         }
+        return "OK";
     }else{
         
         throw new Error('Event received must be an array with at least 2 elements');
