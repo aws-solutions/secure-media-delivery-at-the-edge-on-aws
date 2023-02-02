@@ -41,7 +41,6 @@ exports.handler = async (event, context) => {
                 "Item": myItem
             }).promise()
             console.log(`Item inserted, sessionid=${item['Data'][0]['VarCharValue']}`);            
-            
         }
         return "OK";
     }else{
