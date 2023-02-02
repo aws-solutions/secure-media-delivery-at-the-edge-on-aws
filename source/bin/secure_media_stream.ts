@@ -8,7 +8,7 @@ import { IConfiguration } from "../helpers/validators/configuration";
 
 const solutionId = 'SO0195';
 const solutionDisplayName = 'Secure Media Delivery at the Edge on AWS';
-const solutionVersion = '1.1.0';
+const solutionVersion = '%%VERSION%%';
 const description = `(${solutionId}) - ${solutionDisplayName}. Version ${solutionVersion}`;
 
 const app = new App();
