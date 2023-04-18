@@ -54,6 +54,7 @@ export class Endpoints extends Construct {
 
     const s3Logs = new s3.Bucket(this, "LogsBucket", {
       encryption: s3.BucketEncryption.S3_MANAGED,
+      objectOwnership: s3.ObjectOwnership.OBJECT_WRITER,
       blockPublicAccess: new s3.BlockPublicAccess({
         blockPublicPolicy: true,
         blockPublicAcls: true,
