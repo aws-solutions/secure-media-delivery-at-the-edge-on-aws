@@ -75,7 +75,7 @@ const getConfiguration = async (): Promise<IConfiguration> => {
       try {
         await moduleImpl.prompt(configuration);
       } catch (e) {
-        console.log(e.message);
+        console.log((e as Error).message);
         process.exit(0);
       }
     }

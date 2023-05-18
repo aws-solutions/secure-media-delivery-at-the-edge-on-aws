@@ -11,7 +11,7 @@ test('Create endpoints - demoWebsite=true', () => {
   // WHEN
   
   const myLmbda = new lambda.Function(stack, "MyLambda", {
-    runtime: lambda.Runtime.NODEJS_14_X,
+    runtime: lambda.Runtime.NODEJS_16_X,
     code: lambda.Code.fromAsset("lambda/generate_token/nodejs"),
     handler: "index.handler",
   });
@@ -43,7 +43,7 @@ test('Create endpoints - demoWebsite=false', () => {
   // WHEN
   
   const myLmbda = new lambda.Function(stack, "MyLambda", {
-    runtime: lambda.Runtime.NODEJS_14_X,
+    runtime: lambda.Runtime.NODEJS_16_X,
     code: lambda.Code.fromAsset("lambda/generate_token/nodejs"),
     handler: "index.handler",
   });
