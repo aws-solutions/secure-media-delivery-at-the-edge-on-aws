@@ -27,7 +27,7 @@ describe('process.env', () => {
       });
       
   } catch (e) {
-    expect(e.message).toBe("Event received must be an array with at least 2 elements");
+    expect((e as Error).message).toBe("Event received must be an array with at least 2 elements");
   }
 
   });

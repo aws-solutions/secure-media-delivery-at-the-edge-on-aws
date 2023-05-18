@@ -11,7 +11,7 @@
     "aws-secure-media-delivery": "file:../../../../resources/sdk/node/v1/",
     "base64url": "^3.0.1",
     "debug": "^4.3.3",
-    "jsonwebtoken": "^8.5.1"
+    "jsonwebtoken": "^9.0.0"
   },
   "author": "",
   "license": "ISC"
