@@ -19,6 +19,7 @@ package-lock.json
 deployment/global-s3-assets
 deployment/regional-s3-assets
 open-source/
+deployment/staging
 
 # Temporary folders
 tmp/
