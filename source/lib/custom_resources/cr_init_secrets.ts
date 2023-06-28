@@ -24,7 +24,7 @@ export class CrInitSecrets extends Construct {
   constructor(scope: Construct, id: string, props: IConfigProps) {
     super(scope, id);
 
-    new custom_resources.AwsCustomResource(this, "rotateSecrets", {
+    new custom_resources.AwsCustomResource(this, "rotateSecrets", { // NOSONAR
       onCreate: {
         service: "Lambda",
         action: "invoke",

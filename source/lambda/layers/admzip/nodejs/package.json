@@ -1,5 +1,5 @@
 {
-  "name": "zip-local",
+  "name": "adm-zip",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -7,8 +7,11 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "zip-local": "^0.3.5"
+    "adm-zip": "^0.5.10"
   },
-  "author": "",
-  "license": "ISC"
+  "author": {
+    "name": "Amazon Web Services",
+    "url": "https://aws.amazon.com/solutions"
+  },
+  "license": "Apache-2.0"
 }

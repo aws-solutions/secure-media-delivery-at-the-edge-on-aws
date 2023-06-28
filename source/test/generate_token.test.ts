@@ -1,9 +1,16 @@
 const generateTokenHandler = require('../lambda/generate_token/nodejs/index.js');
-
-jest.mock("aws-sdk")
-
+import awsSdkMock from "./__mocks__/aws-sdk-mock";
 
 describe("Generate a token", () => {
+    let mocks: any[] = [];
+
+    beforeEach(() => {
+        mocks = awsSdkMock.mockAllAWSClients();
+    });
+
+    afterEach(() => {
+        awsSdkMock.reseMocks(mocks);
+    });
 
     test('generate token - result 200', async () => {
       // arrange and act

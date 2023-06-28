@@ -94,7 +94,7 @@ const rotation_datetime_question = [
       "[Base module] --> At what time of the day should take place (use the format HH:mm, events use UTC+0 time zone) ",
     validate: (value: string) =>
       Joi.string()
-        .regex(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/)
+        .regex(/^(0\d|1\d|2[0-3]):[0-5]\d$/)
         .validate(value).error
         ? "The expected format is HH:mm"
         : true,
@@ -118,8 +118,8 @@ export class MainModule implements PromptComponent {
     if (configuration.main.rotate_secrets_frequency !== "m") {
       //Minutes	Hours	Day_of_month	Month	Day_of_week	Year
       //MIN HOUR * * DAY *
-      var day_of_the_week = "*";
-      var day_of_the_month = "?";
+      let day_of_the_week = "*";
+      const day_of_the_month = "?";
 
       if (configuration.main.rotate_secrets_frequency === "1w") {
         const day = await prompts.prompt(rotation_day_of_the_week_question, {

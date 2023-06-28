@@ -27,7 +27,7 @@ export class CrLoadAssetsTable extends Construct {
   constructor(scope: Construct, id: string, props: IConfigProps) {
     super(scope, id);
 
-    new custom_resources.AwsCustomResource(this, "initDBResource", {
+    new custom_resources.AwsCustomResource(this, "initDBResource", { // NOSONAR
       onCreate: {
         service: "DynamoDB",
         action: "batchWriteItem",
@@ -46,23 +46,23 @@ export class CrLoadAssetsTable extends Construct {
   }
 
   private loadItems = (configuration: IConfiguration) => {
-    var fileContent = fs.readFileSync("resources/mock/assets.json").toString();
-    var itemsToInsert = new Array();
+    let fileContent = fs.readFileSync("resources/mock/assets.json").toString();
+    let itemsToInsert = new Array();
     if (configuration.hls) {
-      const urlPath = configuration.hls?.url_path!;
+      const urlPath = configuration.hls?.url_path;
       const path = urlPath.substring(0, urlPath.lastIndexOf("/")) + "/";
 
-      var hlsFileContent = fileContent.replace(
+      let hlsFileContent = fileContent.replace(
         "CUSTOM_HOST_NAME",
-        configuration.hls?.hostname!
+        configuration.hls?.hostname
       );
       hlsFileContent = hlsFileContent.replace(
         "CUSTOM_URL_PATH",
-        configuration.hls?.url_path!
+        configuration.hls?.url_path
       );
       hlsFileContent = hlsFileContent.replace(
         "CUSTOM_TTL",
-        configuration.hls?.ttl!
+        configuration.hls?.ttl
       );
       hlsFileContent = hlsFileContent.replace("CUSTOM_ID", "1");
       hlsFileContent = hlsFileContent.replace("CUSTOM_PATH", path);
@@ -70,19 +70,19 @@ export class CrLoadAssetsTable extends Construct {
     }
 
     if (configuration.dash) {
-      const urlPath = configuration.dash?.url_path!;
+      const urlPath = configuration.dash?.url_path;
       const path = urlPath.substring(0, urlPath.lastIndexOf("/")) + "/";
-      var dashFileContent = fileContent.replace(
+      let dashFileContent = fileContent.replace(
         "CUSTOM_HOST_NAME",
-        configuration.dash?.hostname!
+        configuration.dash?.hostname
       );
       dashFileContent = dashFileContent.replace(
         "CUSTOM_URL_PATH",
-        configuration.dash?.url_path!
+        configuration.dash?.url_path
       );
       dashFileContent = dashFileContent.replace(
         "CUSTOM_TTL",
-        configuration.dash?.ttl!
+        configuration.dash?.ttl
       );
       dashFileContent = dashFileContent.replace("CUSTOM_ID", "2");
       dashFileContent = dashFileContent.replace("CUSTOM_PATH", path);

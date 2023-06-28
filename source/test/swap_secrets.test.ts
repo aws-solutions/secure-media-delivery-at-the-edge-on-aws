@@ -1,12 +1,12 @@
 const swapSecrets = require('../lambda/swap_secrets/index.js');
-
-jest.mock("aws-sdk")
+import awsSdkMock from "./__mocks__/aws-sdk-mock";
 
 describe('process.env', () => {
-  const env = process.env
+  const env = process.env;
+  let mocks: any[] = [];
 
   beforeEach(() => {
-      jest.resetModules()
+      mocks = awsSdkMock.mockAllAWSClients();
       process.env = {  
         TEMPORARY_KEY_NAME: "myTemporaryKey",
         PRIMARY_KEY_NAME: "myPrimaryKey",
@@ -15,7 +15,8 @@ describe('process.env', () => {
   })
 
   afterEach(() => {
-      process.env = env
+      process.env = env;
+      awsSdkMock.reseMocks(mocks);
   })
 
   test('swap secrets - result 200', async () => {

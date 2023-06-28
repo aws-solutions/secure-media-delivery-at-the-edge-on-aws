@@ -2,8 +2,6 @@ const cff = require("../lambda/generate_secret_update_cff/cff.js");
 
 const myMock = jest.spyOn(cff, "decodeString");
 
-jest.mock("aws-sdk") // jest will automatically find the mock
-
 myMock.mockImplementation( param => {
   return Buffer.from(String(param), 'base64').toString();
 });

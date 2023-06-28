@@ -1,12 +1,12 @@
 const update_rulegroup = require('../lambda/update_rulegroup/index.js');
-
-jest.mock("aws-sdk")
+import awsSdkMock from "./__mocks__/aws-sdk-mock";
 
 describe('process.env', () => {
-  const env = process.env
+  const env = process.env;
+  let mocks: any[] = [];
 
   beforeEach(() => {
-      jest.resetModules()
+      mocks = awsSdkMock.mockAllAWSClients();
       process.env = {  
         RULE_ID: "ca2a976c-1df0-41b2-9234-055318508a9b",
         RULE_NAME: "MYDEMO1_BlockSessions",
@@ -18,7 +18,8 @@ describe('process.env', () => {
   })
 
   afterEach(() => {
-      process.env = env
+      process.env = env;
+      awsSdkMock.reseMocks(mocks);
   })
 
 

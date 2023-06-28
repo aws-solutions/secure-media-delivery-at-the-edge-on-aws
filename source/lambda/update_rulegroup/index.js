@@ -11,10 +11,11 @@
  *  and limitations under the License.                                                                                *
  *********************************************************************************************************************/
 
-const aws = require('aws-sdk');
+const { DynamoDB } = require("@aws-sdk/client-dynamodb");
+const { WAFV2 } = require("@aws-sdk/client-wafv2");
 
-const wafv2 = process.env.METRICS == "true" ? new aws.WAFV2({ region: 'us-east-1', customUserAgent: process.env.SOLUTION_IDENTIFIER }) : new aws.WAFV2({ region: 'us-east-1' });
-const dynamodb = process.env.METRICS == "true" ? new aws.DynamoDB({customUserAgent: process.env.SOLUTION_IDENTIFIER}) : new aws.DynamoDB();
+const wafv2 = process.env.METRICS == "true" ? new WAFV2({ region: 'us-east-1', customUserAgent: process.env.SOLUTION_IDENTIFIER }) : new WAFV2({ region: 'us-east-1' });
+const dynamodb = process.env.METRICS == "true" ? new DynamoDB({customUserAgent: process.env.SOLUTION_IDENTIFIER}) : new DynamoDB();
 
 
 const crypto = require("crypto");
@@ -25,7 +26,7 @@ function getFormattedRuleConfig(sessionId, ruleName, priority) {
         "Priority": priority,
         "Statement": {
             "ByteMatchStatement": {
-                "SearchString": sessionId,
+                "SearchString": Buffer.from(sessionId),
                 "FieldToMatch": {
                     "UriPath": {
 
@@ -61,7 +62,7 @@ async function getCurrentRules() {
         Name: process.env.RULE_NAME,
         Scope: 'CLOUDFRONT'
     };
-    return wafv2.getRuleGroup(params).promise()
+    return wafv2.getRuleGroup(params);
 }
 
 async function updateRules(visibility, lockToken, rules) {
@@ -75,7 +76,7 @@ async function updateRules(visibility, lockToken, rules) {
         LockToken: lockToken,
         Rules: rules
     };
-    return wafv2.updateRuleGroup(params).promise();
+    return wafv2.updateRuleGroup(params);
 
 }
 
@@ -97,7 +98,7 @@ async function querySessions() {
         TableName: process.env.TABLE_NAME
     };
 
-    return dynamodb.query(params).promise();
+    return dynamodb.query(params);
 }
 
 function getRandomAlphanumericString() {
@@ -109,11 +110,14 @@ exports.handler = async (event, context) => {
     console.log("event=" + JSON.stringify(event));
 
     const result = await querySessions();
-    var globalIndex = 1
-    var localIndex = 1
-    var rules = []
-    const maxSessions = parseInt(process.env.MAX_SESSIONS)/2;
-    if (result['Items']) {
+    if (!result['Items']) {
+        console.log("No Session ID from DynamoDB Table. Nothing to do.")
+    } else {
+        let globalIndex = 1
+        let localIndex
+        let rules = []
+        const maxSessions = parseInt(process.env.MAX_SESSIONS) / 2;
+        
         const items = result['Items'];
         console.log(`${items.length} Sessions IDs from DynamoDB to process`)
 
@@ -127,30 +131,30 @@ exports.handler = async (event, context) => {
             return e['type']['S'] == 'AUTO';
         });
 
-        const sortedAutoSessions = autoSessions.sort((a, b) => {
+        autoSessions.sort((a, b) => {
             return b['score']['N'] - a['score']['N'];
         });
 
+        localIndex = 1
         for (const item of manualSessions) {
-
-            if (globalIndex <= maxSessions) {
-                var myRuleName = String(getRandomAlphanumericString())
-                const currentRule1 = getFormattedRuleConfig('/' + item['session_id']['S'], myRuleName, globalIndex)
-                rules.push(currentRule1)
-                globalIndex += 1
-                localIndex += 1
-            } else {
+            if (globalIndex > maxSessions) {
                 console.log("Max items added to rule group reached, stopping iteration through results from dynamodb")
                 break
             }
-            console.log(`${(localIndex - 1)} MANUAL Sessions IDs to add to Rule Group`)
 
-            localIndex = 1
+            const myRuleName = String(getRandomAlphanumericString())
+            const currentRule1 = getFormattedRuleConfig('/' + item['session_id']['S'], myRuleName, globalIndex)
+            rules.push(currentRule1)
+            globalIndex += 1
+            localIndex += 1
+
+            console.log(`${(localIndex - 1)} MANUAL Sessions IDs to add to Rule Group`)
         }
 
-        for (const item of sortedAutoSessions) {
+        localIndex = 1
+        for (const item of autoSessions) {
             if (globalIndex <= maxSessions) {
-                myRuleName = String(getRandomAlphanumericString())
+                const myRuleName = String(getRandomAlphanumericString())
                 const currentRule2 = getFormattedRuleConfig('/' + item['session_id']['S'], myRuleName, globalIndex)
                 rules.push(currentRule2)
                 globalIndex += 1
@@ -169,8 +173,6 @@ exports.handler = async (event, context) => {
             await updateRules(attachedRules['RuleGroup']['VisibilityConfig'], attachedRules['LockToken'], rules)
         }
 
-    } else {
-        console.log("No Session ID from DynamoDB Table. Nothing to do.")
     }
 
 

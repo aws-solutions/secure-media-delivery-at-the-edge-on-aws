@@ -63,7 +63,7 @@ exports.handler = async event => {
     // Finally, add the signature headers to the request
     console.log("signature="+JSON.stringify(signature));
     
-    for(var header in signature){
+    for(const header in signature){
         request.headers[header.toLowerCase()] = [{
             key: header,
             value: signature[header].toString()

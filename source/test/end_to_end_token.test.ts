@@ -1,8 +1,6 @@
-const aws1 = require("aws-sdk") // we still need to require this
 const awsSMD1 = require('../resources/sdk/node/v1/aws-secure-media-delivery.js');
 const cff1 = require("../lambda/generate_secret_update_cff/cff.js");
-
-//import * as cff1 from "../lambda/generate_secret_update_cff/index.js";
+import awsSdkMock from "./__mocks__/aws-sdk-mock";
 
 awsSMD1.Token.setDEBUG(true);
 awsSMD1.Secret.setDEBUG(true);
@@ -13,13 +11,19 @@ let token1 = new awsSMD1.Token(secret1);
 
 const addMock = jest.spyOn(cff1, "decodeString");
 
-jest.mock("aws-sdk") // jest will automatically find the mock
-
 addMock.mockImplementation( param => {
   return Buffer.from(String(param), 'base64').toString();
 } );
 
 describe("Check token generation", () => {
+  let mocks: any[] = [];
+  beforeEach(() => {
+      mocks = awsSdkMock.mockAllAWSClients();
+  });
+
+  afterEach(() => {
+      awsSdkMock.reseMocks(mocks);
+  })
 
   test("Check token - valid token, ip=false ", async () => {
 

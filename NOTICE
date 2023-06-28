@@ -11,18 +11,27 @@ THIRD PARTY COMPONENTS
 **********************
 This software includes third party software subject to the following copyrights:
 
-prettier                            MIT
-prompts                             MIT
-babel__traverse                     MIT
-typescript-eslint/eslint-plugin     Apache-2.0
-typescript-eslint/parser            Apache-2.0
-aws-cdk                             Apache-2.0
-aws-cdk-lib                         Apache-2.0
-jest                                MIT
-ts-jest                             MIT
-ts-node                             MIT
-typescript                          Apache-2.0
-zip-local                           MIT
-constructs                          Apache-2.0
-source-map-support                  MIT     
-watch                               Apache-2.0
+prettier                                                                MIT
+prompts                                                                 MIT
+babel__traverse                                                         MIT
+typescript-eslint/eslint-plugin                                         Apache-2.0
+typescript-eslint/parser                                                Apache-2.0
+aws-cdk                                                                 Apache-2.0
+aws-cdk-lib                                                             Apache-2.0
+jest                                                                    MIT
+ts-jest                                                                 MIT
+ts-node                                                                 MIT
+typescript                                                              Apache-2.0
+adm-zip                                                                 MIT
+constructs                                                              Apache-2.0
+source-map-support                                                      MIT     
+watch                                                                   Apache-2.0
+aws-sdk-client-mock                                                     MIT
+base64url                                                               MIT
+debug                                                                   MIT
+jsonwebtoken                                                            MIT
+@aws-cdk/aws-apigatewayv2-alpha                                         Apache-2.0
+@aws-cdk/aws-apigatewayv2-authorizers-alpha                             Apache-2.0
+@aws-cdk/aws-apigatewayv2-integrations-alpha                            Apache-2.0
+@aws-cdk/aws-servicecatalogappregistry-alpha                            Apache-2.0
+joi                                                                     BSD-3-Clause

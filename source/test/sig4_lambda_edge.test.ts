@@ -1,5 +1,4 @@
 const lambdaEdge = require('../lambda/custom_resource_us_east_1/le.js');
-jest.mock("aws-sdk")
 
 
 

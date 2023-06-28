@@ -34,6 +34,7 @@ import { RotateSecretsWorkflow } from "./main/rotate_secrets_workflow";
 import { Secrets } from "./main/secrets";
 import { SessionRevocation } from "./main/session_revocation";
 import { addCfnSuppressRules } from "./cfn_nag/cfn_nag_utils";
+import { applyAppRegistry } from './application_registry/application_registry';
 
 export interface SecureMediaStreamStackProps extends StackProps {
   readonly description: string
@@ -192,7 +193,7 @@ export class SecureMediaStreamingStack extends Stack {
 
     if (parameters.customInputParameters.api) {
       //if the API module was selected in the wizard, deploy the required resources
-      new Api(this, "Api", {
+      new Api(this, "Api", { // NOSONAR
         configuration: parameters.customInputParameters,
         secrets: secrets,
         dashboard: dashboard,
@@ -202,17 +203,20 @@ export class SecureMediaStreamingStack extends Stack {
       });
     }
 
-    new CfnOutput(this, "RoleArn", {
+    // Service Catalog Application Registry
+    applyAppRegistry(this, appConfig);
+
+    new CfnOutput(this, "RoleArn", { // NOSONAR
       description: "The ARN of the role to be assumed by SDK",
       value: role4sdk.roleArn,
     });
 
-    new CfnOutput(this, "CheckTokenFunction", {
+    new CfnOutput(this, "CheckTokenFunction", { // NOSONAR
       description: "CloudFront Function Token validator",
       value: checkToken.functionName
     });
 
-    new CfnOutput(this, "SessionRevocationTable", {
+    new CfnOutput(this, "SessionRevocationTable", { // NOSONAR
       description: "Table that holds the sessions to be revoked",
       value: sessionToRevoke.tableName
     });

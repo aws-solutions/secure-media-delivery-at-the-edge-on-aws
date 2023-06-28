@@ -7,6 +7,7 @@ import { AutoSessionRevocationStack, AutoSessionRevocationStackProps } from "../
 import { IConfiguration } from "../helpers/validators/configuration";
 
 const solutionId = 'SO0195';
+const solutionName = 'secure-media-delivery-at-the-edge-on-aws';
 const solutionDisplayName = 'Secure Media Delivery at the Edge on AWS';
 const solutionVersion = '%%VERSION%%';
 const description = `(${solutionId}) - ${solutionDisplayName}. Version ${solutionVersion}`;
@@ -42,6 +43,8 @@ export const getAutoSessionStackProps = (): AutoSessionRevocationStackProps => {
   const config = await getOpts();
   config.solutionId = solutionId;
   config.solutionVersion = solutionVersion;
+  config.solutionName = solutionName;
+  config.solutionDisplayName = solutionDisplayName;
  
   const coreStack = new SecureMediaStreamingStack(
     app,
@@ -52,7 +55,7 @@ export const getAutoSessionStackProps = (): AutoSessionRevocationStackProps => {
   );
 
   if (config.sessionRevocation) {
-    new AutoSessionRevocationStack(
+    new AutoSessionRevocationStack( // NOSONAR - typescript:S1848 - false positive for cdk code
       app,
       config.main.stack_name + "AutoSessionRevocation",
       config,

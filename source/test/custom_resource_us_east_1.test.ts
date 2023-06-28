@@ -1,24 +1,22 @@
-const cr = require('../lambda/custom_resource_us_east_1/index.js');
-jest.mock("aws-sdk")
-
 import fs from 'fs';
+import AwsSdkMock from './__mocks__/aws-sdk-mock';
+const cr = require('../lambda/custom_resource_us_east_1/index.js');
 
-const spy = jest.spyOn(fs, 'copyFileSync').mockImplementation(() => { 
+jest.spyOn(fs, 'copyFileSync').mockImplementation(() => { 
     return ``;
- });
-
+});
 
 describe('Custom resource', () => {
-
+    let mocks: any[] = [];
     const env = process.env
 
-    beforeEach(  ()   =>   {
-
+    beforeEach(() => {
         let data = "Mocked content of my file";
 
         fs.writeFileSync("/tmp/le.js", data);
-
-        jest.resetModules()
+        
+        mocks = AwsSdkMock.mockAllAWSClients();
+        
         process.env = {  
             ROLE_ARN: "MyRoleArn",
             STACK_NAME: "MyStackName",
@@ -28,12 +26,11 @@ describe('Custom resource', () => {
             RULE_NAME: "MyRuleName",
             DEPLOY_LE: "1"
             };
-
-            
     })
 
     afterEach(() => {
-        process.env = env
+        process.env = env;
+        AwsSdkMock.reseMocks(mocks);
     })
 
     
@@ -42,7 +39,6 @@ describe('Custom resource', () => {
     var result = await cr.handler({});
     
     expect(result).toHaveLength;
-
  });
 
  test('Do not deploy LE - result OK', async () => {
@@ -55,7 +51,7 @@ describe('Custom resource', () => {
         RULE_ID: "MyRuleID",
         RULE_NAME: "MyRuleName",
         DEPLOY_LE: "0"
-        };
+    };
 
     var result = await cr.handler({});
     

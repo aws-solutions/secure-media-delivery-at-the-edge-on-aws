@@ -5,7 +5,6 @@ import {  aws_dynamodb as dynamodb, Stack
 import { Api } from '../lib/api/api';
 import { Secrets } from '../lib/main/secrets';
 import { CWDashboard } from '../lib/main/dashboard';
-import { GetInputParameters } from '../lib/cfn/check_input_parameters';
 
 test('Create Api - demo=true', () => {
   const stack = new Stack();

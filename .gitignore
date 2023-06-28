@@ -14,10 +14,10 @@ source/lambda/layers/aws_secure_media_delivery_python/python/*
 cdk.out
 dist
 !**/cdk-solution-helper/index.js
-package-lock.json
 .venv
 deployment/global-s3-assets
 deployment/regional-s3-assets
+deployment/staging
 open-source/
 deployment/staging
 

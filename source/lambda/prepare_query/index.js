@@ -17,7 +17,7 @@ function buildSecondPartQueryString(lookbackMinutes) {
 
     const previousDate = new Date(nowDate.getTime() - lookbackMinutes * 60000);
     console.log("Query date between: " + previousDate + " and " + nowDate);
-    var query_string = "";
+    let query_string = "";
     if (previousDate.getDay() == nowDate.getDay()){
 
         console.log("Same day query filter!");
@@ -95,8 +95,8 @@ function buildSecondPartQueryString(lookbackMinutes) {
 
 function generateAthenaQuery(query_param) {
     console.log("Athena params=" + JSON.stringify(query_param));
-    var thirdPartPreamble = "";
-    var queryStringSecond_part = "";
+    let thirdPartPreamble = "";
+    let queryStringSecond_part = "";
     const queryStringFirstPart = `WITH Q1 AS (
          SELECT
                split(split_part(uri, '/',2),'.') AS path_first_part_array,

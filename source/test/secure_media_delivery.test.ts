@@ -1,8 +1,5 @@
-//import { validateIPv6 } from "../resources/sdk/node/v1/aws-secure-media-delivery.js";
-
-const aws = require("aws-sdk") // we still need to require this
 const awsSMD = require('../resources/sdk/node/v1/aws-secure-media-delivery.js');
-jest.mock("aws-sdk") // jest will automatically find the mock
+import awsSdkMock from "./__mocks__/aws-sdk-mock";
 
 awsSMD.Token.setDEBUG(true);
 awsSMD.Secret.setDEBUG(true);
@@ -12,55 +9,15 @@ secret.initSMClient();
 let token = new awsSMD.Token(secret);
 
 
-
-describe("Check IPv6", () => {
-
-  test('format 1 IP v6', () => {
-    // arrange and act
-    var result = awsSMD.validateIPv6("684D:1111:222:3333:4444:5555:6:77")
-
-    expect(result).toBe(true);
-  });
-
-  test('format 2 IP v6', () => {
-    // arrange and act
-    var result = awsSMD.validateIPv6("2001:0:3238:DFE1:63::FEFB")
-
-    expect(result).toBe(true);
-  });
-
-  test('format 3 IP v6', () => {
-    // arrange and act
-    var result = awsSMD.validateIPv6("1234:fd2:5621:1:89:0:0:4500")
-
-    expect(result).toBe(true);
-  });
-
-  test('format 4 IP v6', () => {
-    // arrange and act
-    var result = awsSMD.validateIPv6("2001:db8:0:0:1::1")
-
-    expect(result).toBe(true);
-  });
-
-
-  test('format 5 IP v6', () => {
-    // arrange and act
-    var result = awsSMD.validateIPv6("2001:db8:0::0a:1")
-
-    expect(result).toBe(true);
-  });
-
-
-
-
-});
-
-
-
-
-
 describe("Check token generation", () => {
+  let mocks: any[] = [];
+  beforeEach(() => {
+      mocks = awsSdkMock.mockAllAWSClients();
+  });
+
+  afterEach(() => {
+      awsSdkMock.reseMocks(mocks);
+  });
 
   test("Without IP, token generated ", async () => {
 

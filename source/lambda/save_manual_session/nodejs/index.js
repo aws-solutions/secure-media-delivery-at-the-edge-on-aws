@@ -11,7 +11,6 @@
  *  and limitations under the License.                                                                                *
  *********************************************************************************************************************/
 
-const aws = require('aws-sdk');
 const awsSMD = require("aws-secure-media-delivery");
 
 const tableName = process.env.TABLE_NAME;

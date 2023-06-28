@@ -1,19 +1,20 @@
 const updateToken = require('../lambda/update_token/index.js');
-
-jest.mock("aws-sdk")
+import awsSdkMock from "./__mocks__/aws-sdk-mock";
 
 describe('process.env', () => {
-  const env = process.env
+  const env = process.env;
+  let mocks: any[] = [];
   beforeEach(() => {
-    jest.resetModules()
-    process.env = {  
-      TABLE_NAME: "myTableName",
-  };
-})
+      mocks = awsSdkMock.mockAllAWSClients();
+      process.env = {  
+        TABLE_NAME: "myTableName",
+      };
+  })
 
-afterEach(() => {
-    process.env = env
-})
+  afterEach(() => {
+      process.env = env;
+      awsSdkMock.reseMocks(mocks);
+  })
 
   test('Update token - result OK', async () => {
     const event = {

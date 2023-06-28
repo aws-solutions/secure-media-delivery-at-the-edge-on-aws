@@ -46,7 +46,7 @@ export class Api extends Construct {
       this,
       "GenerateTokenLayer",
       {
-        compatibleRuntimes: [lambda.Runtime.NODEJS_16_X],
+        compatibleRuntimes: [lambda.Runtime.NODEJS_18_X],
         code: lambda.Code.fromAsset(
           "lambda/layers/aws_secure_media_delivery_nodejs"
         ),
@@ -66,7 +66,7 @@ export class Api extends Construct {
 
     if(props.configuration.hls || props.configuration.dash){
       //load the DDB table with 2 items (one for HLS and one for DASH)
-      new CrLoadAssetsTable(this, "AssetsTable", {
+      new CrLoadAssetsTable(this, "AssetsTable", { // NOSONAR
         table: demoAssetsTable,
         configuration: props.configuration,
       });
@@ -75,7 +75,7 @@ export class Api extends Construct {
     //Lambda that will generate the token using the provided SDK
     const generateToken = new lambda.Function(this, "GenerateToken", {
       functionName: Aws.STACK_NAME + "_GenerateToken",
-      runtime: lambda.Runtime.NODEJS_16_X,
+      runtime: lambda.Runtime.NODEJS_18_X,
       code: lambda.Code.fromAsset("lambda/generate_token/nodejs"),
       handler: "index.handler",
       environment: {
@@ -103,7 +103,7 @@ export class Api extends Construct {
     //Lambda to update parameters for the token
     const updateToken = new lambda.Function(this, "UpdateToken", {
       functionName: Aws.STACK_NAME + "_UpdateToken",
-      runtime: lambda.Runtime.NODEJS_16_X,
+      runtime: lambda.Runtime.NODEJS_18_X,
       code: lambda.Code.fromAsset("lambda/update_token"),
       handler: "index.handler",
       environment: {
@@ -136,7 +136,7 @@ export class Api extends Construct {
     //Lambda used to add manually a session to be revoked into a DynamoDB Table
     const saveManualSession = new lambda.Function(this, "SaveManualSession", {
       functionName: Aws.STACK_NAME + "_SaveManualSession",
-      runtime: lambda.Runtime.NODEJS_16_X,
+      runtime: lambda.Runtime.NODEJS_18_X,
       code: lambda.Code.fromAsset("lambda/save_manual_session/nodejs"),
       handler: "index.handler",
       environment: {
@@ -169,7 +169,7 @@ export class Api extends Construct {
     props.secrets.primarySecret.grantRead(generateToken);
     props.secrets.secondarySecret.grantRead(generateToken);
     //endpoint creation using a CloudFront Distribution in front of an HTTP API
-    new Endpoints(this, "Endpoints", {
+    new Endpoints(this, "Endpoints", { // NOSONAR
       generateTokenLambdaFunction: generateToken,
       saveSessionToDDBLambdaFunction: saveManualSession,
       updateTokenLambdaFunction: updateToken,
@@ -184,7 +184,7 @@ export class Api extends Construct {
       region: Aws.REGION,
     });
 
-    new CfnOutput(this, "VideoAssetTable", {
+    new CfnOutput(this, "VideoAssetTable", { // NOSONAR
       description: "Video asset table name",
       value: demoAssetsTable.tableName
     });

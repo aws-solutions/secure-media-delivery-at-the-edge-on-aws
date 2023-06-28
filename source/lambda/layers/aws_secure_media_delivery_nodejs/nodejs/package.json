@@ -7,12 +7,14 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "aws-sdk": "^2.1077.0",
     "aws-secure-media-delivery": "file:../../../../resources/sdk/node/v1/",
     "base64url": "^3.0.1",
     "debug": "^4.3.3",
     "jsonwebtoken": "^9.0.0"
   },
-  "author": "",
-  "license": "ISC"
+  "author": {
+    "name": "Amazon Web Services",
+    "url": "https://aws.amazon.com/solutions"
+  },
+  "license": "Apache-2.0"
 }

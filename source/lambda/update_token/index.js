@@ -1,5 +1,6 @@
-const aws = require('aws-sdk');
-const dynamodb = process.env.METRICS == "true" ?  new aws.DynamoDB.DocumentClient({customUserAgent: process.env.SOLUTION_IDENTIFIER}) :  new aws.DynamoDB.DocumentClient();
+const { DynamoDBDocument } = require("@aws-sdk/lib-dynamodb");
+const { DynamoDB } = require("@aws-sdk/client-dynamodb");
+const dynamodb = process.env.METRICS == "true" ?  DynamoDBDocument.from(new DynamoDB({customUserAgent: process.env.SOLUTION_IDENTIFIER})) :  DynamoDBDocument.from(new DynamoDB());
  
 
 exports.handler = async (event, context) => {
@@ -30,7 +31,7 @@ exports.handler = async (event, context) => {
                 id: String(event.queryStringParameters.id),
             },
             UpdateExpression: "set token_policy.headers = :myHeaders, token_policy.ip = :myIp ",
-    ExpressionAttributeValues: {
+            ExpressionAttributeValues: {
                 ":myHeaders": tokenHeaders,
                 ":myIp": tokenIp
             },
@@ -38,7 +39,7 @@ exports.handler = async (event, context) => {
         };
 
         console.log(JSON.stringify(params));
-        await dynamodb.update(params).promise();
+        await dynamodb.update(params);
 
         return {
             statusCode: 200,

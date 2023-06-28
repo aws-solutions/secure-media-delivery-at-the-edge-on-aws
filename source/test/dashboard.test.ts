@@ -14,7 +14,7 @@ test('Create CW dashboard with widgets', () => {
 
   const generateToken = new lambda.Function(stack, "GenerateToken", {
     functionName: Aws.STACK_NAME + "_GenerateToken",
-    runtime: lambda.Runtime.NODEJS_16_X,
+    runtime: lambda.Runtime.NODEJS_18_X,
     code: lambda.Code.fromAsset("lambda/generate_token/nodejs"),
     handler: "index.handler",
 

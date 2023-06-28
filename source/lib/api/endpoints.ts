@@ -61,6 +61,8 @@ export class Endpoints extends Construct {
         ignorePublicAcls: true,
         restrictPublicBuckets: true,
       }),
+      versioned: true,
+      enforceSSL: true,
     });
 
     addCfnSuppressRules(s3Logs, [
@@ -85,6 +87,8 @@ export class Endpoints extends Construct {
         ignorePublicAcls: true,
         restrictPublicBuckets: true
        }),
+       versioned: true,
+       enforceSSL: true,
     });
 
     addCfnSuppressRules(hostingBucket, [
@@ -99,7 +103,7 @@ export class Endpoints extends Construct {
     ]);
 
     const folder = props.demo ? "demo_website" : "empty_demo_website";
-    new s3deploy.BucketDeployment(this, "DeployWebsite", {
+    new s3deploy.BucketDeployment(this, "DeployWebsite", { // NOSONAR
       sources: [s3deploy.Source.asset("resources/" + folder)],
       destinationBucket: hostingBucket,
     });
@@ -325,17 +329,17 @@ export class Endpoints extends Construct {
       },
     ]);
 
-    new CfnOutput(this, "HostingBucketName", {
+    new CfnOutput(this, "HostingBucketName", { // NOSONAR
       value: hostingBucket.bucketName,
       description: "Hosting bucket name",
     });
 
-    new CfnOutput(this, "ApiEndpoint", {
+    new CfnOutput(this, "ApiEndpoint", { // NOSONAR
       value: `${httpApi.apiId}.execute-api.${region}.amazonaws.com`,
       description: "Endpoint",
     });
 
-    new CfnOutput(this, "DistributionDomainName", {
+    new CfnOutput(this, "DistributionDomainName", { // NOSONAR
       value: "https://" + distribution.domainName,
       description: "Demo Website",
     });

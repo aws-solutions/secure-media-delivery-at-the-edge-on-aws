@@ -1,5 +1,4 @@
 import * as prompts from "prompts";
-import * as Joi from "joi";
 import { PromptComponent } from "./prompt-component";
 import { onCancel } from "./handlers";
 import { IConfiguration } from "../../../helpers/validators/configuration";
