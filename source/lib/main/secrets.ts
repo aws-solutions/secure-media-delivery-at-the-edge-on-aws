@@ -65,12 +65,12 @@ export class Secrets extends Construct {
     this.secondarySecret = secondarySecret;
     this.temporarySecret = temporarySecret;
 
-    new CfnOutput(this, "PrimarySecret", {
+    new CfnOutput(this, "PrimarySecret", { // NOSONAR
       value: primarySecret.secretName,
       description: "The name of the PrimarySecret",
     });
 
-    new CfnOutput(this, "SecondarySecret", {
+    new CfnOutput(this, "SecondarySecret", { // NOSONAR
       value: secondarySecret.secretName,
       description: "The name of the SecondarySecret",
     });

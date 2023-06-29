@@ -51,7 +51,7 @@ export class AutoRevokeSessionsWorkflow extends Construct {
 
     const submitAthenaQuery = new lambda.Function(this, "SubmitQuery", {
       functionName: Aws.STACK_NAME + "_SubmitQuery",
-      runtime: lambda.Runtime.NODEJS_16_X,
+      runtime: lambda.Runtime.NODEJS_18_X,
       code: lambda.Code.fromAsset("lambda/prepare_query"),
       handler: "index.handler",
       environment: {
@@ -79,7 +79,7 @@ export class AutoRevokeSessionsWorkflow extends Construct {
 
     const saveSessionsToDdb = new lambda.Function(this, "SaveAutoSession", {
       functionName: Aws.STACK_NAME + "_SaveAutoSession",
-      runtime: lambda.Runtime.NODEJS_16_X,
+      runtime: lambda.Runtime.NODEJS_18_X,
       code: lambda.Code.fromAsset("lambda/save_auto_session"),
       handler: "index.handler",
       environment: {
@@ -216,7 +216,7 @@ export class AutoRevokeSessionsWorkflow extends Construct {
       rule.addTarget(new targets.SfnStateMachine(workflow));
     }
 
-    new CfnOutput(this, "SessionInvalidateName", {
+    new CfnOutput(this, "SessionInvalidateName", { // NOSONAR
       value: workflow.stateMachineName,
       description: "State machine used to detect sessions to invalidate",
     });

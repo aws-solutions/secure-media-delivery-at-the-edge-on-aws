@@ -19,6 +19,8 @@ import { sessionRevocationSchema, ISessionRevocation } from './auto_session_revo
   dash?: IHosting;
   solutionId?: string;
   solutionVersion?: string;
+  solutionName?: string;
+  solutionDisplayName?: string;
 }
 
 /**

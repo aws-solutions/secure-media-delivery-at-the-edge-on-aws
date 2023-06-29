@@ -11,9 +11,8 @@
  *  and limitations under the License.                                                                                *
  *********************************************************************************************************************/
 
-const aws = require('aws-sdk');
-const dynamodb = process.env.METRICS == "true" ?  new aws.DynamoDB({customUserAgent: process.env.SOLUTION_IDENTIFIER}) :  new aws.DynamoDB();
- 
+const { DynamoDB } = require("@aws-sdk/client-dynamodb");
+const dynamodb = process.env.METRICS == "true" ?  new DynamoDB({customUserAgent: process.env.SOLUTION_IDENTIFIER}) :  new DynamoDB();
 
 exports.handler = async (event, context) => {
     console.log("event="+JSON.stringify(event));
@@ -39,7 +38,7 @@ exports.handler = async (event, context) => {
             await dynamodb.putItem({
                 "TableName": process.env.TABLE_NAME,
                 "Item": myItem
-            }).promise()
+            });
             console.log(`Item inserted, sessionid=${item['Data'][0]['VarCharValue']}`);            
         }
         return "OK";

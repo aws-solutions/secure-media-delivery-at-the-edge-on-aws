@@ -24,7 +24,7 @@ export class GetInputParameters extends Construct {
   constructor(scope: Construct, id: string, configuration: IConfiguration) {
     super(scope, id);
 
-    var returnObject: IConfiguration;
+    let returnObject: IConfiguration;
 
     if (configuration.main.rotate_secrets_pattern === "P") {
 
@@ -228,6 +228,12 @@ export class GetInputParameters extends Construct {
     }
 
     if (configuration.dash) {
+      returnObject.dash = {
+        hostname: configuration.dash?.hostname,
+        url_path: configuration.dash?.url_path,
+        ttl: configuration.dash?.ttl,
+      };
+
       if (configuration.dash?.hostname === "H") {
         const dash_hostname = new CfnParameter(this, "DashHostName", {
           type: "String",
@@ -278,12 +284,6 @@ export class GetInputParameters extends Construct {
           url_path: Fn.conditionIf(dashPathCondition.logicalId, "/video/2/index.mpd", dash_url_path.valueAsString).toString(),
           ttl: Fn.conditionIf(dashTtlCondition.logicalId, "+30m", dash_ttl.valueAsString).toString()
         };
-      } else {
-        returnObject.dash = {
-          hostname: configuration.dash?.hostname!,
-          url_path: configuration.dash?.url_path!,
-          ttl: configuration.dash?.ttl!,
-        };
       }
     } else {
       returnObject.dash = {
@@ -294,6 +294,12 @@ export class GetInputParameters extends Construct {
     }
 
     if (configuration.hls) {
+      returnObject.hls = {
+        hostname: configuration.hls?.hostname,
+        url_path: configuration.hls?.url_path,
+        ttl: configuration.hls?.ttl,
+      };
+
       if (configuration.hls?.hostname === "H") {
 
         const hls_hostname = new CfnParameter(this, "HlsHostName", {
@@ -345,12 +351,6 @@ export class GetInputParameters extends Construct {
           hostname: Fn.conditionIf(hlsHostCondition.logicalId, "https://d123.cloudfront.net", hls_hostname.valueAsString).toString(),
           url_path: Fn.conditionIf(hlsPathCondition.logicalId, "/video/1/index.m3u8", hls_url_path.valueAsString).toString(),
           ttl: Fn.conditionIf(hlsTtlCondition.logicalId, "+30m", hls_ttl.valueAsString).toString()
-        };
-      } else {
-        returnObject.hls = {
-          hostname: configuration.hls?.hostname!,
-          url_path: configuration.hls?.url_path!,
-          ttl: configuration.hls?.ttl!,
         };
       }
     } else {

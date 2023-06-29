@@ -57,20 +57,12 @@ echo "mkdir -p $staging_dist_dir"
 mkdir -p $staging_dist_dir
 
 echo "------------------------------------------------------------------------------"
-echo "[Synth] CDK Project"
-echo "------------------------------------------------------------------------------"
-
-# Install the global aws-cdk package
-echo "cd $source_dir"
-cd $source_dir
-echo "npm install aws-cdk@$cdk_version"
-npm install aws-cdk@$cdk_version
-
-echo "------------------------------------------------------------------------------"
 echo "NPM Install in the source folder"
 echo "------------------------------------------------------------------------------"
 
 # Install the npm install in the source folder
+echo "cd $source_dir"
+cd $source_dir
 echo "npm install"
 npm install
 
@@ -114,7 +106,7 @@ for cdk_key in `ls  | grep '^asset'`; do
         current_asset_name=$item.zip
     fi
 
-    sed -i'' -e "s#$current_asset_name#$SOLUTION_NAME/$VERSION/$asset_new_name#g" $staging_dist_dir/secure-media-delivery-at-the-edge-on-aws.yaml
+    sed -i'' -e "s#$current_asset_name#$SOLUTION_NAME/$DIST_VERSION/$asset_new_name#g" $staging_dist_dir/secure-media-delivery-at-the-edge-on-aws.yaml
 
     let "i+=1"
 

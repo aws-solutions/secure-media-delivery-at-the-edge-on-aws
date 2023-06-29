@@ -43,7 +43,7 @@ export class CRCreateLEWafRule extends Construct {
     const triggerPolicy = new iam.PolicyDocument({
       statements: [
         new iam.PolicyStatement({
-          resources: ["*"],
+          resources: [`arn:aws:lambda:*:${Aws.ACCOUNT_ID}:function:*`],
           actions: [
             "lambda:CreateFunction",
             "lambda:PublishVersion",
@@ -134,15 +134,15 @@ export class CRCreateLEWafRule extends Construct {
       },
     });
 
-    const archiverLayer = new lambda.LayerVersion(this, "ZipLocalLayer", {
-      compatibleRuntimes: [lambda.Runtime.NODEJS_16_X],
-      code: lambda.Code.fromAsset("lambda/layers/ziplocal"),
+    const archiverLayer = new lambda.LayerVersion(this, "AdmZipLayer", {
+      compatibleRuntimes: [lambda.Runtime.NODEJS_18_X],
+      code: lambda.Code.fromAsset("lambda/layers/admzip"),
       description: "Layer used to zip lambda edge file",
     });
 
-    new triggers.TriggerFunction(this, "UsEast1Trigger", {
+    new triggers.TriggerFunction(this, "UsEast1Trigger", { // NOSONAR
       functionName: Aws.STACK_NAME + "_CustomResourceUsEast1",
-      runtime: lambda.Runtime.NODEJS_16_X,
+      runtime: lambda.Runtime.NODEJS_18_X,
       handler: "index.handler",
       timeout: Duration.seconds(600),
       code: lambda.Code.fromAsset("lambda/custom_resource_us_east_1"),

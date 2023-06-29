@@ -1,9 +1,9 @@
 const generateSecrets = require('../lambda/generate_secret_update_cff/index.js');
-jest.mock("aws-sdk")
+import awsSdkMock from './__mocks__/aws-sdk-mock';
 
 import fs from 'fs';
 
-const spy = jest.spyOn(fs, 'readFileSync').mockImplementation(() => { 
+jest.spyOn(fs, 'readFileSync').mockImplementation(() => { 
     return `
     var secrets = { "secret1_key_to_replace": "secret1_value_to_replace", "secret2_key_to_replace": "secret2_value_to_replace"};
     function _base64urlDecode(str) {
@@ -13,13 +13,12 @@ const spy = jest.spyOn(fs, 'readFileSync').mockImplementation(() => {
     `;
  });
 
-
-
 describe('process.env', () => {
-  const env = process.env
+  const env = process.env;
+  let mocks: any[] = [];
 
   beforeEach(() => {
-      jest.resetModules()
+    mocks = awsSdkMock.mockAllAWSClients();
       process.env = {  
         TEMPORARY_KEY_NAME: "MyTemporarySecretKey",
         PRIMARY_KEY_NAME: "MyPrimarySecretKey",
@@ -29,7 +28,8 @@ describe('process.env', () => {
   })
 
   afterEach(() => {
-      process.env = env
+      process.env = env;
+      awsSdkMock.reseMocks(mocks);
   })
 
 

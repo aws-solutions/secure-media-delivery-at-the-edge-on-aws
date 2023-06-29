@@ -10,7 +10,7 @@
  *  OR CONDITIONS OF ANY KIND, express or implied. See the License for the specific language governing permissions    *
  *  and limitations under the License.                                                                                *
  *********************************************************************************************************************/
-import { CfnCondition, CfnResource, Resource } from "aws-cdk-lib";
+import { CfnResource, Resource } from "aws-cdk-lib";
 
 
 interface CfnNagSuppressRule {
@@ -37,17 +37,3 @@ export function addCfnSuppressRules(resource: Resource | CfnResource | undefined
   }
 }
 
-/**
- * Adds CDK condition to the CDK resource.
- * @param resource The CDK resource.
- * @param condition The CDK condition.
- */
-export function addCfnCondition(resource: Resource | CfnResource | undefined, condition: CfnCondition) {
-  if (typeof resource === 'undefined') return;
-
-  if (resource instanceof Resource) {
-    resource = resource.node.defaultChild as CfnResource;
-  }
-
-  (resource as CfnResource).cfnOptions.condition = condition;
-}

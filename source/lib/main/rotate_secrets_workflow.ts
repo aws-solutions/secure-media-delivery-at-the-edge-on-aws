@@ -55,7 +55,7 @@ export class RotateSecretsWorkflow extends Construct {
       "GenerateSecretUpdateCff",
       {
         functionName: Aws.STACK_NAME + "_GenerateSecretUpdateCff",
-        runtime: lambda.Runtime.NODEJS_16_X,
+        runtime: lambda.Runtime.NODEJS_18_X,
         code: lambda.Code.fromAsset("lambda/generate_secret_update_cff"),
         timeout: Duration.seconds(300),
         handler: "index.handler",
@@ -97,7 +97,7 @@ export class RotateSecretsWorkflow extends Construct {
     addCfnSuppressRules(myLogs, [{ id: 'W84', reason: 'CloudWatch log group is always encrypted by default.' }]);
 
 
-    new CrInitSecrets(this, "Init", {
+    new CrInitSecrets(this, "Init", { // NOSONAR
       functionArn: generateSecretUpdateCff.functionArn,
       functionName: generateSecretUpdateCff.functionName,
     });
@@ -107,7 +107,7 @@ export class RotateSecretsWorkflow extends Construct {
     // - the old secret1 is stored in secret2
     const swapSecrets = new lambda.Function(this, "SwapSecrets", {
       functionName: Aws.STACK_NAME + "_SwapSecrets",
-      runtime: lambda.Runtime.NODEJS_16_X,
+      runtime: lambda.Runtime.NODEJS_18_X,
       code: lambda.Code.fromAsset("lambda/swap_secrets"),
       handler: "index.handler",
       environment: {
@@ -215,7 +215,7 @@ export class RotateSecretsWorkflow extends Construct {
     const schedule_expression =
       props.configuration.main?.rotate_secrets_pattern;
     const schedule_frequency =
-      props.configuration.main?.rotate_secrets_frequency!;
+      props.configuration.main?.rotate_secrets_frequency;
     if (schedule_frequency !== "m") {
       // Trigger Sfn to rotate the secrets every X minutes
       const rule = new events.Rule(this, "Rule1", {
@@ -231,7 +231,7 @@ export class RotateSecretsWorkflow extends Construct {
 
     this.workflowArn = workflow.stateMachineArn;
 
-    new CfnOutput(this, "SFRotateSecrets", {
+    new CfnOutput(this, "SFRotateSecrets", { // NOSONAR
       value: workflow.stateMachineName,
       description: "The name of the Step Function to rotate secrets",
     });

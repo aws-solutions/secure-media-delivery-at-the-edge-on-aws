@@ -1,7 +1,5 @@
 const sybmitQuery = require('../lambda/prepare_query/index.js');
 
-jest.mock("aws-sdk")
-
 describe('process.env', () => {
   const env = process.env
 

@@ -10,11 +10,12 @@
  *  OR CONDITIONS OF ANY KIND, express or implied. See the License for the specific language governing permissions    *
  *  and limitations under the License.                                                                                *
  *********************************************************************************************************************/
- const aws = require('aws-sdk');
+ const { CloudFront } = require("@aws-sdk/client-cloudfront");
+ const { SecretsManager } = require("@aws-sdk/client-secrets-manager");
 
  
- const secretsmanager = process.env.METRICS == "true" ? new aws.SecretsManager({customUserAgent: process.env.SOLUTION_IDENTIFIER}) : new aws.SecretsManager();
- const cloudfront = process.env.METRICS == "true" ?  new aws.CloudFront({customUserAgent: process.env.SOLUTION_IDENTIFIER}) :  new aws.CloudFront();
+ const secretsmanager = process.env.METRICS == "true" ? new SecretsManager({customUserAgent: process.env.SOLUTION_IDENTIFIER}) : new SecretsManager();
+ const cloudfront = process.env.METRICS == "true" ?  new CloudFront({customUserAgent: process.env.SOLUTION_IDENTIFIER}) :  new CloudFront();
 
 
  const crypto = require("crypto");
@@ -30,7 +31,7 @@
      const day = String(dateObj.getUTCDate());
      const year = String(dateObj.getUTCFullYear());
  
-     var nowDate = year + month + day;
+     const nowDate = year + month + day;
      return nowDate + '_' + randomKeySuffix;
  }
  
@@ -41,10 +42,10 @@
  
  async function getCffUpdatedCode(secret1Key, secret1Value, secret2Key, secret2Value) {
  
-     var newContent = "";
+     let newContent = "";
      const allFileContents = fs.readFileSync('cff.js', 'utf-8');
      allFileContents.split(/\r?\n/).forEach(line => {
-         var newLine = "";
+         let newLine;
  
          line = line.trim()
  
@@ -71,11 +72,11 @@
  
      console.log("Get ETAG for CloudFront Function " + process.env.CFF_NAME);
  
-     var params = {
+     let params = {
          Name: process.env.CFF_NAME
      };
  
-     var response = await cloudfront.describeFunction(params).promise();
+     let response = await cloudfront.describeFunction(params);
      console.log("Update CloudFront Function Code");
      params = {
          FunctionCode: Buffer.from(functionCodeAsStr),
@@ -87,7 +88,7 @@
          Name: process.env.CFF_NAME
      };
  
-     response = await cloudfront.updateFunction(params).promise();
+     response = await cloudfront.updateFunction(params);
      console.log("response = "+JSON.stringify(response));
      
      console.log("Publish CloudFront Function");
@@ -95,7 +96,7 @@
          IfMatch: response['ETag'],
          Name: process.env.CFF_NAME
      };
-     await cloudfront.publishFunction(params).promise();
+     await cloudfront.publishFunction(params);
  
  
      console.log("Cloudfront Function updated");
@@ -115,42 +116,42 @@
          //update temporary secret  with a new value
          const newSecretKey = generateSecretKey();
          const newSecretValue = generateSecretValue();
-         var objectTemporary = {};
+         const objectTemporary = {};
          objectTemporary[newSecretKey] = newSecretValue;
-         var params = {
+         let params = {
              SecretId: temporaryKeyName,
              SecretString: JSON.stringify(objectTemporary)
          };
  
-         await secretsmanager.putSecretValue(params).promise();
+         await secretsmanager.putSecretValue(params);
  
          console.log("Initialize primary secret")
  
          //update primary secret  with a new value
-         var newPrimarySecretKey = generateSecretKey();
-         var newPrimarySecretValue = generateSecretValue();
-         var objectPrimary = {};
+         const newPrimarySecretKey = generateSecretKey();
+         const newPrimarySecretValue = generateSecretValue();
+         const objectPrimary = {};
          objectPrimary[newPrimarySecretKey] = newPrimarySecretValue;
          params = {
              SecretId: primaryKeyName,
              SecretString: JSON.stringify(objectPrimary)
          };
  
-         await secretsmanager.putSecretValue(params).promise();
+         await secretsmanager.putSecretValue(params);
  
          console.log("Initialize temporary secret")
  
          //update secondary secret  with a new value
-         var newSecondarySecretKey = generateSecretKey();
-         var newSecondarySecretValue = generateSecretValue();
-         var objectSecondary = {};
+         const newSecondarySecretKey = generateSecretKey();
+         const newSecondarySecretValue = generateSecretValue();
+         const objectSecondary = {};
          objectSecondary[newSecondarySecretKey] = newSecondarySecretValue;
          params = {
              SecretId: secondaryKeyName,
              SecretString: JSON.stringify(objectSecondary)
          };
  
-         await secretsmanager.putSecretValue(params).promise();
+         await secretsmanager.putSecretValue(params);
  
  
          await getCffUpdatedCode(newPrimarySecretKey, newPrimarySecretValue, newSecondarySecretKey, newSecondarySecretValue);
@@ -162,27 +163,27 @@
          // Update temporary secret with a new value
          const newSecretKey = generateSecretKey();
          const newSecretValue = generateSecretValue();
-         var objectTemporary = {};
+         const objectTemporary = {};
          objectTemporary[newSecretKey] = newSecretValue;
  
-         var params = {
+         let params = {
              SecretId: temporaryKeyName,
              SecretString: JSON.stringify(objectTemporary)
          };
  
-         await secretsmanager.putSecretValue(params).promise();
+         await secretsmanager.putSecretValue(params);
  
          //get primary secret
          params = {
              SecretId: primaryKeyName
          };
  
-         var responseSecret = await secretsmanager.getSecretValue(params).promise();
+         const responseSecret = await secretsmanager.getSecretValue(params);
  
-         var primarySecretAsJson = JSON.parse(responseSecret.SecretString);
+         const primarySecretAsJson = JSON.parse(responseSecret.SecretString);
  
-         var primarySecretKeyName = Object.keys(primarySecretAsJson)[0];
-         var primarySecretKeyValue = Object.values(primarySecretAsJson)[0];
+         const primarySecretKeyName = Object.keys(primarySecretAsJson)[0];
+         const primarySecretKeyValue = Object.values(primarySecretAsJson)[0];
  
          await getCffUpdatedCode(newSecretKey, newSecretValue, primarySecretKeyName, primarySecretKeyValue);
  

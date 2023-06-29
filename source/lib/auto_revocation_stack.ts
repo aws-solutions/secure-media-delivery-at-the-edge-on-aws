@@ -54,7 +54,9 @@ export class AutoSessionRevocationStack extends Stack {
         blockPublicAcls: true,
         ignorePublicAcls: true,
         restrictPublicBuckets: true
-       }),
+      }),
+      versioned: true,
+      enforceSSL: true,
     });
 
     addCfnSuppressRules(sqlQueryBucket, [{ id: 'W51', reason: 'The bucket is used to store results from Athena Query' }]);
@@ -86,7 +88,7 @@ export class AutoSessionRevocationStack extends Stack {
     //When DynamoDB table holding the configuration for Athena query is modified, the Lambda is triggered and updates the env params for SubmitQuery Lambda
     //the StepFunction when running the query against CloudFront logs
     const exportParams = new lambda.Function(this, "ExportParams", {
-      runtime: lambda.Runtime.NODEJS_16_X,
+      runtime: lambda.Runtime.NODEJS_18_X,
       functionName: Aws.STACK_NAME + "_ExportParams",
       code: lambda.Code.fromAsset("lambda/export_params"),
       handler: "index.handler",

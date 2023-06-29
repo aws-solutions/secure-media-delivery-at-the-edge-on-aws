@@ -11,8 +11,8 @@
  *  and limitations under the License.                                                                                *
  *********************************************************************************************************************/
  
- const aws = require('aws-sdk');
- const secretsmanager = process.env.METRICS == "true" ? new aws.SecretsManager({customUserAgent: process.env.SOLUTION_IDENTIFIER}) : new aws.SecretsManager();
+ const { SecretsManager } = require("@aws-sdk/client-secrets-manager");
+ const secretsmanager = process.env.METRICS == "true" ? new SecretsManager({customUserAgent: process.env.SOLUTION_IDENTIFIER}) : new SecretsManager();
  
  
  
@@ -25,11 +25,11 @@
      const secondaryKeyName = process.env.SECONDARY_KEY_NAME;
  
      //get temporary secret
-     var params = {
+     let params = {
          SecretId: temporaryKeyName
      };
  
-     var responseSecret = await secretsmanager.getSecretValue(params).promise();
+     let responseSecret = await secretsmanager.getSecretValue(params);
      console.log(responseSecret);
  
      const temporarySecretAsJson = JSON.parse(responseSecret.SecretString);
@@ -41,13 +41,13 @@
          SecretId: primaryKeyName
      };
  
-     responseSecret = await secretsmanager.getSecretValue(params).promise();
+     responseSecret = await secretsmanager.getSecretValue(params);
      
      const primarySecretAsJson = JSON.parse(responseSecret.SecretString);
      const primarySecretKeyName = Object.keys(primarySecretAsJson)[0];
      const primarySecretKeyValue = Object.values(primarySecretAsJson)[0];
  
-     var objectSecondary = {};
+     const objectSecondary = {};
      objectSecondary[primarySecretKeyName] = primarySecretKeyValue;
 
      //set primary value to secondary secret
@@ -55,9 +55,9 @@
          SecretId: secondaryKeyName, 
          SecretString: JSON.stringify(objectSecondary)
      };
-     await secretsmanager.putSecretValue(params).promise();
+     await secretsmanager.putSecretValue(params);
  
-     var objectPrimary = {};
+     const objectPrimary = {};
      objectPrimary[temporarySecretKeyName] = temporarySecretKeyValue;
 
      //set temporary value to primary secret
@@ -66,9 +66,9 @@
          SecretString: JSON.stringify(objectPrimary)
      };
  
-     await secretsmanager.putSecretValue(params).promise();
+     await secretsmanager.putSecretValue(params);
  
-     var objectTemporary = {};
+     const objectTemporary = {};
      objectTemporary["INITIALIZED_KEY"] = "INITIALIZED_VALUE";
 
      //delete the temporary keys
@@ -77,7 +77,7 @@
          SecretString: JSON.stringify(objectTemporary)
      };
 
-     await secretsmanager.putSecretValue(params).promise();
+     await secretsmanager.putSecretValue(params);
 
  
      return "OK";
