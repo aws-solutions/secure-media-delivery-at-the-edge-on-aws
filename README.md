@@ -243,7 +243,7 @@ The below information displays approximate values associated with deploying and 
 Metric | Value
 ------ | ------
 **Deployment Time** | 5-10 minutes (depending on the selected options)
-**CDK Version** | 2.79.1
+**CDK Version** | 2.95.1
 
 ## Requirements
 

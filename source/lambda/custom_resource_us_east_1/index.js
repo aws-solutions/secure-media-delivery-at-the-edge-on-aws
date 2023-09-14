@@ -14,7 +14,7 @@
 let fs = require("fs");
 let path = require("path");
 let AdmZip = require("adm-zip");
-
+const os = require('os');
 
 const { Lambda } = require("@aws-sdk/client-lambda");
 const { SSM } = require("@aws-sdk/client-ssm");
@@ -39,9 +39,9 @@ exports.handler = async (event, context) => {
 
 async function createLambdaEdge() {
     let functionArn = '';
-    const le_zip_path = "/tmp/lambda_edge.zip";
+    const le_zip_path = path.join(os.tmpdir(), 'lambda_edge.zip');
     const le_path = "./le.js";
-    const tmp_le_path = "/tmp/le.js";
+    const tmp_le_path = path.join(os.tmpdir(), 'le.js');
     const code_path = path.resolve(le_zip_path)
     let zip = new AdmZip();
     try {

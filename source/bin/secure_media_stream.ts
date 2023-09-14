@@ -6,13 +6,14 @@ import { SecureMediaStreamingStack, SecureMediaStreamStackProps } from "../lib/s
 import { AutoSessionRevocationStack, AutoSessionRevocationStackProps } from "../lib/auto_revocation_stack";
 import { IConfiguration } from "../helpers/validators/configuration";
 
-const solutionId = 'SO0195';
+const app = new App();
+
 const solutionName = 'secure-media-delivery-at-the-edge-on-aws';
-const solutionDisplayName = 'Secure Media Delivery at the Edge on AWS';
-const solutionVersion = '%%VERSION%%';
+const solutionId = app.node.tryGetContext('solution_id');
+const solutionDisplayName = app.node.tryGetContext('solution_name');
+const solutionVersion = app.node.tryGetContext('solution_version');
 const description = `(${solutionId}) - ${solutionDisplayName}. Version ${solutionVersion}`;
 
-const app = new App();
 export const getMainStackProps = (config: IConfiguration): SecureMediaStreamStackProps => {
 
   const stackSynthesizer = config.main?.assets_bucket_name ?  
@@ -26,8 +27,6 @@ export const getMainStackProps = (config: IConfiguration): SecureMediaStreamStac
   return {
     description,
     synthesizer: stackSynthesizer,
-    
-    
   };
 };
 

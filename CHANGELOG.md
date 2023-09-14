@@ -5,7 +5,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-## [1.2.0] - 2023-06-30
+
+## [1.2.1] - 2023-09-15
+
+### Fixed
+- Fixed an issue where the solution was not deployed properly with `cdk deploy` command
+
+## [1.2.0] - 2023-06-29
 ### Changed
 - Integrated Service Catalog App Registry into the solution.
 - All AWS Lambda functions have been updated to the NodeJS 18 runtime.
@@ -14,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - [aws-sdk v2](https://github.com/aws/aws-sdk-js) has been removed from Lambda Layers
 
-## [1.1.4] - 2023-06-1
+## [1.1.4] - 2023-06-01
 ### Changed
 - Updated aws-cdk and aws-cdk-lib to newest version 2.81.0.
 
