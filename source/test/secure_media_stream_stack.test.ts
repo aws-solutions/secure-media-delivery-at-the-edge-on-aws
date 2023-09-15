@@ -5,6 +5,11 @@ import {
 import { IConfiguration } from '../helpers/validators/configuration';
 import { SecureMediaStreamingStack } from '../lib/secure_media_stream_stack';
 import {getMainStackProps} from '../bin/secure_media_stream'
+import packageJson from '../package.json';
+import cdkJson from '../cdk.json';
+
+const packageVersion = packageJson.version;
+const cdkVersion = cdkJson.context.solution_version;
 
 test('Main stack', () => {
   
@@ -55,4 +60,8 @@ test('Main stack', () => {
   template.resourceCountIs("AWS::Logs::LogGroup", 8);
   template.resourceCountIs("AWS::StepFunctions::StateMachine", 1);
 
+});
+
+test('package.json and cdk.json solution versions should match', () => {
+  expect(packageVersion).toEqual(cdkVersion);
 });

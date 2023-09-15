@@ -78,7 +78,7 @@ chmod +x ./install_dependencies.sh && ./install_dependencies.sh
 sed -i'' -e s#MY_ASSETS_BUCKET_NAME#$DIST_OUTPUT_BUCKET#g solution.context.json
 
 # Run 'cdk synth' to generate raw solution outputs
-node_modules/aws-cdk/bin/cdk synth --asset-metadata false --path-metadata false >$staging_dist_dir/secure-media-delivery-at-the-edge-on-aws.yaml
+node_modules/aws-cdk/bin/cdk synth --context solution_version=$DIST_VERSION --asset-metadata false --path-metadata false >$staging_dist_dir/secure-media-delivery-at-the-edge-on-aws.yaml
 
 
 mv cdk.out/* $staging_dist_dir
@@ -135,19 +135,6 @@ echo "Move outputs from staging to template_dist_dir"
 
 echo "cp $template_dir/*.template $template_dist_dir/"
 cp $staging_dist_dir/secure-media-delivery-at-the-edge-on-aws.yaml $template_dist_dir/secure-media-delivery-at-the-edge-on-aws.template
-
-# Replace placeholders
-for file in $template_dist_dir/*.template
-do
-    replace="s/%%BUCKET_NAME%%/$DIST_OUTPUT_BUCKET/g"
-    sed -i -e $replace $file
-
-    replace="s/%%SOLUTION_NAME%%/$SOLUTION_NAME/g"
-    sed -i -e $replace $file
-
-    replace="s/%%VERSION%%/$DIST_VERSION/g"
-    sed -i -e $replace $file
-done
 
 rm secure-media-delivery-at-the-edge-on-aws.yaml
 
