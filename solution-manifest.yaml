@@ -1,0 +1,7 @@
+---
+id: SO0195
+name: secure-media-delivery-at-the-edge-on-aws
+version: 1.2.2
+cloudformation_templates:
+  - template: secure-media-delivery-at-the-edge-on-aws.template
+    main_template: true
