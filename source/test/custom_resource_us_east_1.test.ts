@@ -1,3 +1,6 @@
+/*  This test fails locally unless you have access to tmp folder, so
+    run unit tests script with sudo */
+
 import fs from 'fs';
 import AwsSdkMock from './__mocks__/aws-sdk-mock';
 const cr = require('../lambda/custom_resource_us_east_1/index.js');
