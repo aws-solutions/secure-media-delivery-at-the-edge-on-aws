@@ -28,9 +28,9 @@ import {
 
 import { Construct } from "constructs";
 
-import * as apigwv2 from "@aws-cdk/aws-apigatewayv2-alpha";
-import { HttpIamAuthorizer } from "@aws-cdk/aws-apigatewayv2-authorizers-alpha";
-import { HttpLambdaIntegration } from "@aws-cdk/aws-apigatewayv2-integrations-alpha";
+import * as apigwv2 from "aws-cdk-lib/aws-apigatewayv2";
+import { HttpIamAuthorizer } from "aws-cdk-lib/aws-apigatewayv2-authorizers";
+import { HttpLambdaIntegration } from "aws-cdk-lib/aws-apigatewayv2-integrations";
 import { CfnStage } from "aws-cdk-lib/aws-apigatewayv2";
 import { LogGroup } from "aws-cdk-lib/aws-logs";
 import { IFunction } from "aws-cdk-lib/aws-lambda";
