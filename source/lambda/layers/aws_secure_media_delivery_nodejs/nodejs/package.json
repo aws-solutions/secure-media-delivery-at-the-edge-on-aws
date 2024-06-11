@@ -1,6 +1,6 @@
 {
   "name": "API_endpoint_layer",
-  "version": "1.0.0",
+  "version": "1.2.3",
   "description": "",
   "main": "",
   "scripts": {
@@ -10,7 +10,12 @@
     "aws-secure-media-delivery": "file:../../../../resources/sdk/node/v1/",
     "base64url": "^3.0.1",
     "debug": "^4.3.3",
-    "jsonwebtoken": "^9.0.0"
+    "jsonwebtoken": "^9.0.2"
+  },
+  "overrides": {
+    "jsonwebtoken": {
+      "semver": "^7.5.4"
+    }
   },
   "author": {
     "name": "Amazon Web Services",

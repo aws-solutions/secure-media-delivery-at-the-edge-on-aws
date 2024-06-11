@@ -66,16 +66,13 @@ cd $source_dir
 echo "npm install"
 npm install
 
-mv solution.context.json.template solution.context.json
-
-
 echo "cd "$source_dir""
 cd "$source_dir"
 
 chmod +x ./install_dependencies.sh && ./install_dependencies.sh
 
 #replace assets_bucket_name
-sed -i'' -e s#MY_ASSETS_BUCKET_NAME#$DIST_OUTPUT_BUCKET#g solution.context.json
+sed -e "s#MY_ASSETS_BUCKET_NAME#$DIST_OUTPUT_BUCKET#g" solution.context.json.template > solution.context.json
 
 # Run 'cdk synth' to generate raw solution outputs
 node_modules/aws-cdk/bin/cdk synth --context solution_version=$DIST_VERSION --asset-metadata false --path-metadata false >$staging_dist_dir/secure-media-delivery-at-the-edge-on-aws.yaml
