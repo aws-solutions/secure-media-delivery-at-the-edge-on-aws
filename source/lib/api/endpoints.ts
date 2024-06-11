@@ -22,15 +22,14 @@ import {
   aws_logs as logs,
   Duration,
   custom_resources,
-  aws_iam as iam
-
+  aws_iam as iam,
 } from "aws-cdk-lib";
 
 import { Construct } from "constructs";
 
-import * as apigwv2 from "@aws-cdk/aws-apigatewayv2-alpha";
-import { HttpIamAuthorizer } from "@aws-cdk/aws-apigatewayv2-authorizers-alpha";
-import { HttpLambdaIntegration } from "@aws-cdk/aws-apigatewayv2-integrations-alpha";
+import * as apigwv2 from "aws-cdk-lib/aws-apigatewayv2";
+import { HttpIamAuthorizer } from "aws-cdk-lib/aws-apigatewayv2-authorizers";
+import { HttpLambdaIntegration } from "aws-cdk-lib/aws-apigatewayv2-integrations";
 import { CfnStage } from "aws-cdk-lib/aws-apigatewayv2";
 import { LogGroup } from "aws-cdk-lib/aws-logs";
 import { IFunction } from "aws-cdk-lib/aws-lambda";
@@ -85,10 +84,10 @@ export class Endpoints extends Construct {
         blockPublicPolicy: true,
         blockPublicAcls: true,
         ignorePublicAcls: true,
-        restrictPublicBuckets: true
-       }),
-       versioned: true,
-       enforceSSL: true,
+        restrictPublicBuckets: true,
+      }),
+      versioned: true,
+      enforceSSL: true,
     });
 
     addCfnSuppressRules(hostingBucket, [
@@ -117,7 +116,7 @@ export class Endpoints extends Construct {
     });
 
     const log = new LogGroup(this, "HttpApiLogGroup", {
-      logGroupName: "/aws/apigw/" + httpApi.httpApiName,
+      logGroupName: "/aws/vendedlogs/apigw/" + httpApi.httpApiName,
       removalPolicy: RemovalPolicy.DESTROY,
       retention: logs.RetentionDays.ONE_MONTH,
     });
@@ -218,7 +217,9 @@ export class Endpoints extends Construct {
           action: "getParameter",
           parameters: { Name: `${props.sig4LambdaVersionParamName}` },
           region: Aws.REGION,
-          physicalResourceId: custom_resources.PhysicalResourceId.of(`${props.sig4LambdaVersionParamName}`)
+          physicalResourceId: custom_resources.PhysicalResourceId.of(
+            `${props.sig4LambdaVersionParamName}`
+          ),
         },
         policy: custom_resources.AwsCustomResourcePolicy.fromStatements([
           new iam.PolicyStatement({
@@ -248,7 +249,9 @@ export class Endpoints extends Construct {
     const s3origin = new origins.S3Origin(hostingBucket);
 
     const distribution = new cloudfront.Distribution(this, "Distribution", {
-      comment: Aws.STACK_NAME + " - Demo website Secure Media Delivery at the Edge on AWS",
+      comment:
+        Aws.STACK_NAME +
+        " - Demo website Secure Media Delivery at the Edge on AWS",
       defaultRootObject: "index.html",
       enableLogging: true,
       logBucket: s3Logs,
@@ -301,7 +304,7 @@ export class Endpoints extends Construct {
             cloudfront.ResponseHeadersPolicy
               .CORS_ALLOW_ALL_ORIGINS_WITH_PREFLIGHT,
           allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
-        }, 
+        },
         "/updatetoken": {
           origin: httpApiOrigin,
           edgeLambdas: [

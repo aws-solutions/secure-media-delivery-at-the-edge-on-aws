@@ -92,7 +92,9 @@ export class CRCreateLEWafRule extends Construct {
 
     const triggerRole = new iam.Role(this, "TriggerLERole", {
       assumedBy: new iam.CompositePrincipal(
-        new iam.ServicePrincipal("lambda.amazonaws.com")
+        new iam.ServicePrincipal("edgelambda.amazonaws.com"),
+        new iam.ServicePrincipal("lambda.amazonaws.com"),
+        
       ),
       managedPolicies: [
         {
@@ -121,8 +123,8 @@ export class CRCreateLEWafRule extends Construct {
 
     const roleToPass = new iam.Role(this, "EdgeLambdaServiceRole", {
       assumedBy: new iam.CompositePrincipal(
-        new iam.ServicePrincipal("lambda.amazonaws.com"),
-        new iam.ServicePrincipal("edgelambda.amazonaws.com")
+        new iam.ServicePrincipal("edgelambda.amazonaws.com"),
+        new iam.ServicePrincipal("lambda.amazonaws.com")
       ),
       managedPolicies: [
         {
