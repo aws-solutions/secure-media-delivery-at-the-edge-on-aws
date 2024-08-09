@@ -1,6 +1,6 @@
 {
   "name": "aws-secure-media-delivery",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Node.js collection of modules of Secure Media Delivery at the Edge on AWS Solution.",
   "main": "aws-secure-media-delivery.js",
   "scripts": {
