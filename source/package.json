@@ -1,6 +1,6 @@
 {
   "name": "cdk-solution",
-  "version": "v1.2.4",
+  "version": "v1.2.5",
   "description": "Synthesize templates for Secure Media Delivery at the Edge on AWS using AWS Cloud Development Kit (CDK).",
   "license": "Apache-2.0",
   "author": {
@@ -52,5 +52,8 @@
     "joi": "^17.6.0",
     "prompts": "^2.4.2",
     "source-map-support": "^0.5.16"
+  },
+  "overrides": {
+    "path-to-regexp": ">=8.1.0"
   }
 }
