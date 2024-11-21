@@ -1,4 +1,11 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
+
 'use strict';
+
+import videojs from 'video.js';
+import QRCode from 'qrcode';
+import $ from 'jquery';
 
 var player = videojs('my_video_1');
 
@@ -6,10 +13,6 @@ const HLS_STREAM = "hls";
 const DASH_STREAM = "dash";
 var CURRENT_STREAM = "";
 
-var qr = new QRious({
-  element: document.getElementById("qrcode"), 
-  size: 280
-});
 
 
 $('#hls').on('change', function () {
@@ -32,7 +35,6 @@ function load() {
   const idAsset = CURRENT_STREAM == HLS_STREAM ? 1 : 2;
   const urlToGet = `${location.protocol}\/\/${location.hostname}/tokengenerate?id=` + idAsset;
 
-
   $.ajax({
     type: 'GET',
     url: urlToGet,
@@ -53,16 +55,21 @@ function load() {
       $('#uavalue').html(token_policy.ua_value);
       $('#referevalue').html(token_policy.referer_value);
 
-      
-
       var l = getLocation(manifest_url);
       var tokens = l.pathname.substring(1, l.pathname.indexOf('/', 1)).split(".");
       const jwtHeader = library.json.prettyPrint(JSON.parse(atob(tokens[1])));
       const jwtPayload = library.json.prettyPrint(JSON.parse(atob(tokens[2])));
 
       showVideoMetadata(urlToGet, manifest_url, jwtHeader, jwtPayload);
-
-      qr.value = manifest_url;
+      
+      // set qr code to the manifest url
+      const options = {
+        width: 280,
+      };
+      const canvas = document.getElementById('qrcode');
+      QRCode.toCanvas(canvas, manifest_url, options, function (error) {
+        if (error) console.error(error);
+      });
 
       player.src({
         src: manifest_url

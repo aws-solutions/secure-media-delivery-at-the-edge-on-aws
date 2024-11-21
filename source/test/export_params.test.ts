@@ -1,3 +1,6 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
+
 const exportParams = require('../lambda/export_params/index.js');
 import awsSdkMock from "./__mocks__/aws-sdk-mock";
 
