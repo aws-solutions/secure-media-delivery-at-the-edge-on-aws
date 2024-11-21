@@ -1,15 +1,5 @@
-/*********************************************************************************************************************
- *  Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.                                           *
- *                                                                                                                    *
- *  Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance    *
- *  with the License. A copy of the License is located at                                                             *
- *                                                                                                                    *
- *      http://www.apache.org/licenses/LICENSE-2.0                                                                    *
- *                                                                                                                    *
- *  or in the 'license' file accompanying this file. This file is distributed on an 'AS IS' BASIS, WITHOUT WARRANTIES *
- *  OR CONDITIONS OF ANY KIND, express or implied. See the License for the specific language governing permissions    *
- *  and limitations under the License.                                                                                *
- *********************************************************************************************************************/
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 import {
   Aws,
   CfnOutput,
@@ -101,7 +91,7 @@ export class Endpoints extends Construct {
       { id: "W41", reason: "Encryption done" },
     ]);
 
-    const folder = props.demo ? "demo_website" : "empty_demo_website";
+    const folder = props.demo ? "demo_website/dist" : "empty_demo_website";
     new s3deploy.BucketDeployment(this, "DeployWebsite", { // NOSONAR
       sources: [s3deploy.Source.asset("resources/" + folder)],
       destinationBucket: hostingBucket,

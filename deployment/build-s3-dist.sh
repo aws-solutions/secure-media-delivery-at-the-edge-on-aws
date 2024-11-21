@@ -34,6 +34,7 @@ staging_dist_dir="$template_dir/staging"
 template_dist_dir="$template_dir/global-s3-assets"
 build_dist_dir="$template_dir/regional-s3-assets"
 source_dir="$template_dir/../source"
+demo_website_dir="$template_dir/../source/resources/demo_website"
 
 
 [ "$DEBUG" == 'true' ] && set -x
@@ -55,6 +56,9 @@ echo "rm -rf $staging_dist_dir"
 rm -rf $staging_dist_dir
 echo "mkdir -p $staging_dist_dir"
 mkdir -p $staging_dist_dir
+echo "rm -rf $demo_website_dir/dist"
+rm -rf $demo_website_dir/dist
+
 
 echo "------------------------------------------------------------------------------"
 echo "NPM Install in the source folder"
@@ -65,6 +69,12 @@ echo "cd $source_dir"
 cd $source_dir
 echo "npm install"
 npm install
+
+# Install the demo website package
+echo "Building and bundling demo website"
+cd $demo_website_dir
+npm install
+npm run build
 
 echo "cd "$source_dir""
 cd "$source_dir"

@@ -1,3 +1,6 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
+
 const cff = require("../lambda/generate_secret_update_cff/cff.js");
 
 const myMock = jest.spyOn(cff, "decodeString");

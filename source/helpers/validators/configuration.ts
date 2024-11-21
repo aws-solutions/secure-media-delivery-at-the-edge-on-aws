@@ -1,3 +1,6 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as Joi from 'joi';
 import { apiSchema, IApi } from './api';
 import { coreSchema, IMain } from './main';

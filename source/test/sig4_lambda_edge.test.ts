@@ -1,3 +1,6 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
+
 const lambdaEdge = require('../lambda/custom_resource_us_east_1/le.js');
 
 

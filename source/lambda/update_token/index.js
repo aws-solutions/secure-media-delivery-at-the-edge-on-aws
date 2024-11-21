@@ -1,3 +1,6 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
+
 const { DynamoDBDocument } = require("@aws-sdk/lib-dynamodb");
 const { DynamoDB } = require("@aws-sdk/client-dynamodb");
 const dynamodb = process.env.METRICS == "true" ?  DynamoDBDocument.from(new DynamoDB({customUserAgent: process.env.SOLUTION_IDENTIFIER})) :  DynamoDBDocument.from(new DynamoDB());
